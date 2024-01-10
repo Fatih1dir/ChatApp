@@ -104,11 +104,11 @@ const UserStack = () => {
 export default function App() {
   const { user, loading } = useAuthentication();
 
-  if (loading) {
-    return (
-      <Loading></Loading>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Loading></Loading>
+  //   );
+  // }
 
   // if(loading)
   //   return <Loading/>

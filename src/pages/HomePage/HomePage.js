@@ -103,41 +103,7 @@ const HomePage = ({ navigation }) => {
     fetchChatData();
   }, []);
 
-  // const fetchChatData = async () => {
-  //   try {
-  //     const snapshot = await get(userChatIdsRef);
-
-  //     if (snapshot.exists()) {
-  //       const chatIds = Object.keys(snapshot.val());
-
-  //       const chatDataArray = await Promise.all(
-  //         chatIds.map(async (chatId) => {
-  //           const chatRef = ref(db, `Chats/${chatId}`);
-  //           const chatSnapshot = await get(chatRef);
-
-  //           if (chatSnapshot.exists()) {
-  //             return { chatId, ...chatSnapshot.val() };
-  //           }
-
-  //           return null; // Handle non-existent chat data
-  //         })
-  //       );
-
-  //       setChats(chatDataArray.filter((chat) => chat !== null));
-  //     } else {
-  //       setChats([]); // No chat IDs found
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching chat data:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchChatData(); // Fetch chat data when the component mounts
-  // }, []);
-
-  
-
+  // Handle loading state
   if (loading) {
     return (
       <Loading></Loading>
@@ -152,6 +118,7 @@ const HomePage = ({ navigation }) => {
           renderItem={({ item }) => (
             <ChatCard
               chatName={item.name}
+              chatImage={item.chatImage}
               participants={item.participants}
               updatedAt={item.updatedAt}
               onPress={()=>handleChatCardPress(item.chatId)}
@@ -167,11 +134,6 @@ const HomePage = ({ navigation }) => {
         onSend={handleModalSend}
         onClose={handleModalToggle}
       />
-      {/* <Button
-        text={"Add new chat"}
-        onPress={handleModalToggle}
-        style={styles.button}
-      /> */}
       <FloatingAction
         actions={actions}
         onPressItem={(name) => handlePress(name)}

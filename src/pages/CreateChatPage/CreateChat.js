@@ -18,7 +18,6 @@ const CreateChat = ({navigation}) => {
   const db = getDatabase(app);
   const auth = getAuth(app);
   const [friends, setFriends] = useState([]); // Array to store friends' usernames
-
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const handleToggleSelect = (username) => {

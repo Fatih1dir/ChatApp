@@ -19,6 +19,7 @@ export default styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 8,
+    alignItems: "center",
   },
   headerLeft: {
     flexDirection: "row",
@@ -26,6 +27,12 @@ export default styles = StyleSheet.create({
   chatName: {
     fontSize: 18,
     margin: 0,
+  },
+  chatImage: {
+    width: 40, // Set the desired width
+    height: 40, // Set the desired height
+    borderRadius: 20, // Set half of the width and height to make it a circle
+    marginRight: 10, // Adjust as needed for spacing
   },
   participants: {
     fontSize: 14,

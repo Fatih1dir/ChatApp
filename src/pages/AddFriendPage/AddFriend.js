@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, TouchableOpacity, FlatList } from "react-native";
 import { getDatabase, ref, get,set } from "firebase/database";
-import UserCard from "../../Components/UserCard/UserCard";
+import AddFriendCard from "../../Components/AddFriendCard/AddFriendCard";
 import styles from "./AddFriend.style";
 import { getAuth } from "firebase/auth";
 import { app } from "../../../firebaseConfig";
@@ -14,42 +14,39 @@ const AddFriend = () => {
   const auth = getAuth(app);
   const db = getDatabase();
   const usernamesRef = ref(db, "usernames");
-  const usersRef=ref(db,`users/${auth.currentUser.uid}`)
 
-  useEffect(() => {
-    // Fetch usernames from your database and set them to the state
-    const fetchData = async () => {
-      try {
-        const snapshot = await get(usernamesRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          
-          if (data) {
-            // Extract usernames from the objects and filter out non-strings
-            const usernamesArray = Object.keys(data).map(key=>{
-                return{
-                    username:key,
-                    ...data[key],
-                }
-            })
-            setUsernames(usernamesArray);
-          } else {
-            // Handle the case when there are no usernames
-            setUsernames([]);
-          }
+  // Fetch usernames from your database and set them to the state
+  const fetchData = async () => {
+    try {
+      const snapshot = await get(usernamesRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        
+        if (data) {
+          // Extract usernames from the objects and filter out non-strings
+          const usernamesArray = Object.keys(data).map(key=>{
+              return{
+                  username:key,
+                  ...data[key],
+              }
+          })
+          setUsernames(usernamesArray);
+        } else {
+          // Handle the case when there are no usernames
+          setUsernames([]);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
 
   const filterUsernames = () => {
-    // Filter usernames based on the entered search text
     return usernames.filter((username) =>
-      username.username.toLowerCase().includes(searchText.toLowerCase())
+      username.username.toLowerCase().includes(searchText.toLowerCase()) && username.userid !== auth.currentUser.uid
     );
   };
 
@@ -83,7 +80,7 @@ const AddFriend = () => {
           data={filterUsernames()}
           keyExtractor={(item) => item.userid}
           renderItem={({ item }) => (
-            <UserCard user={item} onAddFriend={()=>handleAddFriend(item)}/>
+            <AddFriendCard user={item} onAddFriend={()=>handleAddFriend(item)}/>
           )}
         />
       )}

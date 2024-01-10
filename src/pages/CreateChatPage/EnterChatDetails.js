@@ -9,16 +9,22 @@ import {
 } from "react-native";
 import Button from "../../Components/Button/Button";
 import { StyleSheet, Dimensions } from "react-native";
-import { ref, get, child, getDatabase } from "firebase/database";
-import { app } from "../../../firebaseConfig";
+import {getDatabase } from "firebase/database";
+import { app} from "../../../firebaseConfig";
+import {getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,} from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import {createChat} from '../../Controllers/CreateChatController';
+import UserCard from "../../Components/UserCard/UserCard";
 
 const EnterChatDetails = ({ route, navigation }) => {
   const db = getDatabase(app);
   const auth = getAuth(app);
+  const storage=getStorage(app);
 
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [chatImage, setChatImage] = useState(null);
@@ -46,14 +52,22 @@ const EnterChatDetails = ({ route, navigation }) => {
         const selectedAssets = result.assets;
         if (selectedAssets.length > 0) {
           const selectedAsset = selectedAssets[0];
-          setChatImage(selectedAsset.uri);
+          setChatImage(selectedAsset.uri)
         }
       }
     }
   };
+  const handleCreateChat=async()=>{
+    // Upload the image to Firebase Storage
+    const response = await fetch(chatImage);
+    const blob = await response.blob();
+    const imageName = `${auth.currentUser.uid}_${Date.now()}.jpg`;
+    const storageReference = storageRef(storage, `images/${imageName}`);
+    await uploadBytes(storageReference, blob);
 
-  handleCreateChat=()=>{
-    createChat(auth.currentUser.uid,chatName,selectedUsers,chatImage);
+    // Get the download URL of the uploaded image
+    const downloadURL = await getDownloadURL(storageReference);
+    createChat(auth.currentUser.uid,chatName,selectedUsers,downloadURL);
     navigation.navigate("Home");
   }
 
@@ -80,11 +94,19 @@ const EnterChatDetails = ({ route, navigation }) => {
         onChangeText={(text) => setChatName(text)}
         value={chatName}
       />
-      <Text>Participants</Text>
-      <FlatList
+      <View style={{ flexDirection: "row"}}>
+        <Text>Participants</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 , borderWidth: 1, borderRadius: 5, backgroundColor: "#2286c3",paddingHorizontal: 5}}>
+          <Text style={{color: "white"}}>Düzenle</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <FlatList 
+        style={{ maxHeight: 60, marginTop: 10 }}
         data={selectedUsers}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <Text>{item}</Text>}
+        renderItem={(item)=><UserCard user={item}></UserCard>}
+        horizontal
       />
       <Button text={"Oluştur"} onPress={()=>handleCreateChat()}></Button>
     </View>

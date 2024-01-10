@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { Text, View, SafeAreaView, TouchableOpacity, TextInput, Image, Button as RNButton } from "react-native";
+import { Text, View, SafeAreaView, TouchableOpacity, TextInput, Image} from "react-native";
 import { app } from "../../../firebaseConfig";
 import { getAuth } from "firebase/auth";
-// import { ref, get, set } from "firebase/database";
-// import storage from 'firebase/storage'; // Import storage from Firebase
-// import * as ImagePicker from 'expo-image-picker'; // Import ImagePicker for selecting images
 import Button from "../../Components/Button/Button";
-
+import {getUserAttributesbyId} from "../../Controllers/User";
+import ParseContentData from "../../Controllers/ParseContentData";
 const auth = getAuth(app);
-//const db = app.database();
-//const storageRef = app.storage().ref();
 
     const ProfilePage = ({ navigation }) => {
+    const [user,setUser]=React.useState({});
 //   const [user] = useState(auth.currentUser);
 //   const [email, setEmail] = useState("");
 //   const [username, setUsername] = useState("");
@@ -64,10 +61,25 @@ const auth = getAuth(app);
   const onLogOutPress = () => {
     auth.signOut().then(() => console.log("User signed out!"));
   };
+  const fetchUserData = async () => {
+    try {
+      const data = await getUserAttributesbyId(auth.currentUser.uid);
+      if (data) {
+        const parsedData = ParseContentData(data);
+        setUser(parsedData[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  React.useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <SafeAreaView>
       <Button text="Logout" onPress={onLogOutPress} />
+      {user ? <Text>{user.username}</Text> : <Text>Loading...</Text>}
 
       {/* {user && (
         <View>

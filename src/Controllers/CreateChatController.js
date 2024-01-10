@@ -79,4 +79,4 @@ function createChat(senderId, chatName, participants,chatImage) {
   });
 }
 
-export { createChat };
+export { createChat};
