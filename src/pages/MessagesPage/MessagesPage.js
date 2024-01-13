@@ -15,7 +15,9 @@ import { SendMessage } from "../../Controllers/SendMessageController";
 import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
 import ParseContentData from "../../Controllers/ParseContentData";
 import MessageCard from "../../Components/MessageCard/MessageCard";
+
 function MessagesPage({ route }) {
+  const flatListRef = React.useRef();
   const db = getDatabase();
   const messagesId = route.params;
   const auth = getAuth(app);
@@ -35,7 +37,7 @@ function MessagesPage({ route }) {
     onValue(ref(db, `Chats/${messagesId}/messages`), (messageSnapshot) => {
       if (messageSnapshot.exists()) {
         const messageData = messageSnapshot.val();
-        const parsedChat = ParseContentData(messageData);
+        const parsedChat = ParseContentData(messageData, "sendAt", false);
         setMessages(parsedChat);
       }
     });
@@ -47,12 +49,22 @@ function MessagesPage({ route }) {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.messagesContainer}>
         {messages.length > 0 && (
           <FlatList
             data={messages}
-            renderItem={({ item }) => <MessageCard message={item} currentUserId={auth.currentUser.uid} />}
+            renderItem={({ item }) => (
+              <MessageCard
+                message={item}
+                currentUserId={auth.currentUser.uid}
+              />
+            )}
             keyExtractor={(item) => item.sendAt}
+            ref={(ref) => (this.flatList = ref)}
+            onContentSizeChange={() =>
+              this.flatList.scrollToEnd({ animated: false })
+            }
+            onLayout={() => this.flatList.scrollToEnd({ animated: false })}
           ></FlatList>
         )}
       </View>
@@ -66,9 +78,10 @@ function MessagesPage({ route }) {
             value={value}
           />
           <TouchableOpacity
-            onPress={() =>
-              handleMessageSend(messagesId, auth.currentUser.uid, value)
-            }
+            onPress={() => {
+              if (value.length > 0)
+                handleMessageSend(messagesId, auth.currentUser.uid, value);
+            }}
           >
             <Icon name={"send"} size={25} color="#1ac0c6" />
           </TouchableOpacity>

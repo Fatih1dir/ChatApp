@@ -1,4 +1,4 @@
-export default function(data){
+export default function(data,dateField = "sendAt",ascending = true) {
     return Object.keys(data).map(key=> {
         return{
             id: key,
@@ -6,6 +6,14 @@ export default function(data){
         }
     })
     .sort(function(a, b) {
-        return (a.sendAt < b.sendAt) ? -1 : ((a.sendAt > b.sendAt) ? 1 : 0);
+        const dateA = new Date(a[dateField]);
+        const dateB = new Date(b[dateField]);
+
+        if(ascending){
+            return (dateA > dateB) ? -1 : ((dateA < dateB) ? 1 : 0);
+        }
+        else{
+            return (dateA < dateB) ? -1 : ((dateA > dateB) ? 1 : 0);
+        }
     });
 }

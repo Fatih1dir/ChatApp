@@ -3,13 +3,14 @@ import { Text, View, SafeAreaView, FlatList } from "react-native";
 import styles from "./HomePage.style";
 import { app } from "../../../firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, get, onValue } from "firebase/database";
+import { getDatabase, ref, get, onValue,update } from "firebase/database";
 import Button from "../../Components/Button/Button";
 import CreateChatModal from "../../Components/Modal/CreateChatModal/CreateChatModal";
 import { createChat } from "../../Controllers/CreateChatController";
 import ChatCard from "../../Components/ChatCard/ChatCard";
 import { FloatingAction } from 'react-native-floating-action';
 import Loading from "../../Components/Loading/Loading";
+import ParseContentData from "../../Controllers/ParseContentData";
 
 const auth = getAuth(app);
 
@@ -17,22 +18,25 @@ const HomePage = ({ navigation }) => {
   const [loading,setLoading]  = React.useState(false);
   const [chatModalVisible, setChatModalVisible] = React.useState(false);
   const [chats, setChats] = React.useState([]);
+  
   const currentUserId = auth.currentUser.uid;
   const db = getDatabase();
   const userChatIdsRef = ref(db, `users/${currentUserId}/chatIds`);
 
   const actions = [
     {
-      icon:null,
+      icon:require("../../../assets/add_chat_Icon.png"),
       text: 'Add Chat',
       name: 'add_chat',
       position: 1,
+      color:"#82368C"
     },
     {
-      icon:null,
+      icon:require("../../../assets/add_friend_Icon.png"),
       text: 'Add Friend',
       name: 'add_friend',
       position: 2,
+      color:"#82368C"
     },
   ];
 
@@ -74,7 +78,6 @@ const HomePage = ({ navigation }) => {
     const handleUserChatIdsSnapshot = (snapshot) => {
       if (snapshot.exists()) {
         const chatIds = Object.keys(snapshot.val());
-
         // Clear the array before fetching new data
         chatDataArray.length = 0;
 
@@ -85,8 +88,28 @@ const HomePage = ({ navigation }) => {
             handleChatData(chatId, chatSnapshot);
             // Update the state only once, after processing all chat data
             if (chatDataArray.length === chatIds.length) {
-              setChats(chatDataArray);
-              setLoading(false);
+              const parsedChatData = ParseContentData(chatDataArray,"updatedAt",true);
+
+              const chatsWithLastMessage = parsedChatData.map((chat) => {
+                let lastMessage;
+              
+                if (!chat.messages || chat.messages.length === 0) {
+                  lastMessage = "No message yet";
+                } else {
+                  lastMessage = ParseContentData(chat.messages, "sendAt", true)[0];
+                  // Update the chats updateAt field
+                  update(ref(db, `Chats/${chat.chatId}`), {
+                    updatedAt: lastMessage.sendAt,
+                  })
+                }
+                return {
+                  ...chat,
+                  lastMessage,
+                };
+              });
+
+            setChats(chatsWithLastMessage);
+            setLoading(false);
             }
           });
         });
@@ -121,6 +144,7 @@ const HomePage = ({ navigation }) => {
               chatImage={item.chatImage}
               participants={item.participants}
               updatedAt={item.updatedAt}
+              lastMessage={item.lastMessage}
               onPress={()=>handleChatCardPress(item.chatId)}
             />
           )}

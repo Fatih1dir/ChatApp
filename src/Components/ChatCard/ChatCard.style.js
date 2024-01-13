@@ -46,5 +46,9 @@ export default styles = StyleSheet.create({
   },
   lastMessage: {
     fontSize: 16,
+    paddingHorizontal: 16,
   },
+  lastMessageContainer:{
+    flexDirection:"row",
+  }
 });
