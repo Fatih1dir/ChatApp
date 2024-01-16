@@ -15,6 +15,7 @@ export function useAuthentication() {
       }
       else{
         setUser(null);
+        setLoading(false);
       }
     });
 

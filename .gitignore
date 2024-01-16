@@ -36,3 +36,7 @@ yarn-error.*
 firebaseConfig.js
 .gitignore
 metro.config.js
+
+# Gradle files
+.gradle/
+build/

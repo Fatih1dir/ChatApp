@@ -8,7 +8,6 @@ export default StyleSheet.create({
     borderRadius: 5,
     flexDirection: "row",
     alignItems: "center",
-    margin:10,
   },
   input: {
     flex: 1,
