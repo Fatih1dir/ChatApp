@@ -9,14 +9,15 @@ import { showMessage} from "react-native-flash-message";
 import { writeUserData } from './CreateUserInDB';
 
 // Create a new user function
-const registerUser = async (email, password, username) => {
+const registerUser = async (username,password) => {
   const auth = getAuth(app);
+  const email = username + "@chatApp.com";
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     try {
-      await writeUserData(user.uid,username,email,"");
+      await writeUserData(user.uid,username);
     } catch (error) {
       console.log(error)
     }

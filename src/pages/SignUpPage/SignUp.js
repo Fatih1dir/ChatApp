@@ -21,7 +21,7 @@ const SignUp = ({ navigation }) => {
       
       if (values.password.length >= 6) {
         // Passwords match and meet the minimum length requirement, proceed with registration
-        registerUser(values.email, values.password, values.username);
+        registerUser(values.username,values.password);
       } else {
         // Password is too short, display an error message or take appropriate action
         showMessage({
@@ -42,15 +42,15 @@ const SignUp = ({ navigation }) => {
     <SafeAreaView>
       <View>
         <Formik
-          initialValues={{ email: "", password: "", repassword: "", username:""}}
+          initialValues={{username:"", password: "", repassword: ""}}
           onSubmit={handleSubmit}
         >
           {({ handleChange, handleSubmit, values }) => (
             <View style={styles.body_container}>
               <Input
-                placeholder={"E-mail giriniz"}
-                value={values.email}
-                onType={handleChange("email")}
+                placeholder={"Bir kullanıcı adı giriniz"}
+                value={values.username}
+                onType={handleChange("username")}
               />
               <Input
                 placeholder={"Şifrenizi giriniz"}
@@ -63,11 +63,6 @@ const SignUp = ({ navigation }) => {
                 value={values.repassword}
                 onType={handleChange("repassword")}
                 isSecure
-              />
-              <Input
-                placeholder={"Bir kullanıcı adı giriniz"}
-                value={values.username}
-                onType={handleChange("username")}
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.loginButton} onPress={() => handleSubmit(values)}>

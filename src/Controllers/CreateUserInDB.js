@@ -4,25 +4,24 @@ import { app } from '../../firebaseConfig'; // Import the app object
 
 import { getDatabase, ref, runTransaction, get } from "firebase/database";
 
-async function isUsernameEmailUnique(db, username, email) {
+async function isUsernameEmailUnique(db, username) {
   const usersRef = ref(db, 'users');
   const snapshot = await get(usersRef);
   const users = snapshot.val();
 
   if (users) {
     const isUsernameUnique = !Object.values(users).some(user => user.username === username);
-    const isEmailUnique = !Object.values(users).some(user => user.email === email);
-    return { isUsernameUnique, isEmailUnique };
+    return { isUsernameUnique};
   }
 
-  return { isUsernameUnique: true, isEmailUnique: true };
+  return { isUsernameUnique: true};
 }
 
-async function writeUserData(userId, name, email, imageUrl) {
+async function writeUserData(userId, name) {
   const db = getDatabase();
-  const { isUsernameUnique, isEmailUnique } = await isUsernameEmailUnique(db, name, email);
+  const { isUsernameUnique} = await isUsernameEmailUnique(db, name);
 
-  if (isUsernameUnique && isEmailUnique) {
+  if (isUsernameUnique) {
     const userRef = ref(db, 'users/' + userId);
     const userNameRef = ref(db, 'usernames/' + name);
 
@@ -31,11 +30,7 @@ async function writeUserData(userId, name, email, imageUrl) {
         if (!userData) {
           userData = {
             username: name,
-            email: email,
           };
-        }
-        if (imageUrl) {
-          userData.profile_picture = imageUrl;
         }
         return userData;
       });
@@ -44,7 +39,6 @@ async function writeUserData(userId, name, email, imageUrl) {
         if (!userData) {
           userData = {
             userid: userId,
-            email: email,
           };
         }
         return userData;
@@ -65,18 +59,6 @@ async function writeUserData(userId, name, email, imageUrl) {
   if(!isUsernameUnique){
     showMessage({
       message: 'Username is already in use',
-      type: 'danger',
-    });
-  }
-  if(!isEmailUnique){
-    showMessage({
-      message: 'Email is already in use',
-      type: 'danger',
-    });
-  }
-  if(!isUsernameUnique & isEmailUnique){
-    showMessage({
-      message: 'Username and email is already in use',
       type: 'danger',
     });
   }

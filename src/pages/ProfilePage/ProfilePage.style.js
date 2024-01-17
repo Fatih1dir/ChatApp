@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
   profileContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   profilePic: {
     width: 100,
@@ -28,7 +28,7 @@ export default styles = StyleSheet.create({
     marginTop: 20,
   },
   bottomButtonsContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   pickerContainer: {
     borderWidth: 1,
@@ -39,10 +39,35 @@ export default styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     alignItems: "center",
+    maxHeight: 50,
   },
   picker: {
     padding: 10,
     color: "black",
     flex: 1,
+  },
+  DateinputContainer: {
+    padding: 5,
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateInput: {
+    flex: 1,
+    padding:10,
+  },
+  profilePicContainer: {
+    position: 'relative',
+  },
+
+  cameraIconContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'grey',
+    borderRadius: 15, // Adjust the value as needed
+    padding: 5,
   },
   });
