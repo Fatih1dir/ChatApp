@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { getUserAttributesbyId } from "../../Controllers/User";
+import { getUserAttributesbyId, getUserAttributesbyUsername } from "../../Controllers/User";
 import ParseContentData from "../../Controllers/ParseContentData";
 import styles from './AddFriendCard.style';
 

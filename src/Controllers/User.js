@@ -3,32 +3,6 @@ import { app } from '../../firebaseConfig';
 import { getAuth } from "firebase/auth";
 
 const auth = getAuth(app);
-// const User = async (username) => {
-//   const db = getDatabase();
-//   const usersRef = ref(db, `usernames`);
-
-//   try {
-//     const snapshot = await get(usersRef);
-//     if (snapshot.exists()) {
-//       const usersData = snapshot.val();
-//       const userKeys = Object.keys(usersData);
-      
-      
-      
-//       for (const userKey of userKeys) {
-//         console.log('User attributesss:', userKey);
-//         if (userKey === username) {
-//             return usersData; // Return user attributes if found
-//           }
-//       }
-//     }
-
-//     return null; // Return null if user with the given username is not found
-//   } catch (error) {
-//     console.error('Error retrieving user attributes:', error);
-//     return null; // Return null in case of an error
-//   }
-// };
 const getUserAttributesbyId = async (userId) => {
   const db = getDatabase();
   const usersRef = ref(db, `users`);
