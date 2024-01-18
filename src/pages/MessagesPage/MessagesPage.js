@@ -15,6 +15,7 @@ import { SendMessage } from "../../Controllers/SendMessageController";
 import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
 import ParseContentData from "../../Controllers/ParseContentData";
 import MessageCard from "../../Components/MessageCard/MessageCard";
+import { showMessage} from "react-native-flash-message";
 
 function MessagesPage({ route }) {
   const flatListRef = React.useRef();
@@ -23,6 +24,7 @@ function MessagesPage({ route }) {
   const auth = getAuth(app);
   const [value, setValue] = React.useState("");
   const [messages, setMessages] = React.useState({});
+  const [isAnonymous, setIsAnonymous] = React.useState(false);
 
   const onType = (text) => {
     setValue(text);
@@ -30,7 +32,7 @@ function MessagesPage({ route }) {
 
   const handleMessageSend = (messagesId, senderId, content) => {
     setValue("");
-    SendMessage(messagesId, senderId, content);
+    SendMessage(messagesId, senderId, content,isAnonymous);
   };
 
   const getMessages = () => {
@@ -43,7 +45,25 @@ function MessagesPage({ route }) {
     });
   };
 
+  const toggleAnonymousMode = () => {
+    setIsAnonymous(!isAnonymous);
+    if (!isAnonymous) {
+      showMessage({
+        message: "Anonim mesaj moduna geçtiniz",
+        type: "info",
+        icon: "info",
+        duration: 3000
+      });
+    }
+  }
+
   React.useEffect(() => {
+    showMessage({
+      message: "Gönder butonuna uzun basarak anonim mesaj gönderebilirsiniz",
+      type: "info",
+      icon: "info",
+      duration: 3000
+    });
     getMessages();
   }, []);
 
@@ -82,8 +102,11 @@ function MessagesPage({ route }) {
               if (value.length > 0)
                 handleMessageSend(messagesId, auth.currentUser.uid, value);
             }}
+            onLongPress={() => {
+              toggleAnonymousMode();
+            }}
           >
-            <Icon name={"send"} size={25} color="#1ac0c6" />
+            {isAnonymous ? <Icon name={"eye"} size={25} color="black" /> :<Icon name={"send"} size={25} color="#1ac0c6" />}
           </TouchableOpacity>
         </View>
       </View>

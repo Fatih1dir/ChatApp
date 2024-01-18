@@ -26,6 +26,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
+import { getDate } from "date-fns";
 const auth = getAuth(app);
 
 const ProfilePage = ({ navigation }) => {
@@ -104,12 +105,21 @@ const ProfilePage = ({ navigation }) => {
       if (data) {
         const parsedData = ParseContentData(data);
         setUser(parsedData[0]);
-        setEmail(parsedData[0].email);
-        setUsername(parsedData[0].username);
-        setSex(parsedData[0].sex);
-        setProfilePic(parsedData[0].profilePic);
-        setDate(new Date(parsedData[0].date));
-        console.log(user);
+        if(parsedData[0].email){
+          setEmail(parsedData[0].email);
+        }
+        if(parsedData[0].username){
+          setUsername(parsedData[0].username);
+        }
+        if(parsedData[0].sex){
+          setSex(parsedData[0].sex);
+        }
+        if(parsedData[0].profilePic){
+          setProfilePic(parsedData[0].profilePic);
+        }
+        if(parsedData[0].date){
+          setDate(parsedData[0].date);
+        }
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -125,7 +135,7 @@ const ProfilePage = ({ navigation }) => {
   }, []);
 
   const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || date || new Date(); // Use a default date if date is undefined
     setShowDatePicker(false);
     setDate(currentDate);
   };
@@ -183,17 +193,28 @@ const ProfilePage = ({ navigation }) => {
           iconName="account"
         />
         <Text>Doğum Tarihi</Text>
-        <TouchableOpacity onPress={showDatePickerModal}>
+        {user.date ? (
+          <View style={styles.DateinputContainer}>
+          <Text
+            style={styles.dateInput}
+            placeholder={new Date(user.date).toLocaleDateString()}
+          >
+            {new Date(date).toLocaleDateString()}
+          </Text>
+          <Icon name="calendar" size={25} color="#1ac0c6" />
+        </View>
+        ): (
+          <TouchableOpacity onPress={showDatePickerModal}>
           <View style={styles.DateinputContainer}>
             <Text
               style={styles.dateInput}
-              placeholder={new Date(user.date).toLocaleDateString()}
             >
-              {date.toISOString().slice(0, 10)}
+              {new Date(date).toLocaleDateString()}
             </Text>
             <Icon name="calendar" size={25} color="#1ac0c6" />
           </View>
         </TouchableOpacity>
+        )}
         {showDatePicker && (
           <DateTimePicker
             value={date}
@@ -202,6 +223,7 @@ const ProfilePage = ({ navigation }) => {
             onChange={handleDateChange}
           />
         )}
+        
         <Text>Cinsiyet</Text>
         {user.sex ? (
           <View style={styles.DateinputContainer}>

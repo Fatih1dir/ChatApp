@@ -18,6 +18,7 @@ const HomePage = ({ navigation }) => {
   const [loading,setLoading]  = React.useState(false);
   const [chatModalVisible, setChatModalVisible] = React.useState(false);
   const [chats, setChats] = React.useState([]);
+  const chatDataArray = [];
   
   const currentUserId = auth.currentUser.uid;
   const db = getDatabase();
@@ -64,61 +65,62 @@ const HomePage = ({ navigation }) => {
     setChatModalVisible(!chatModalVisible);
   };
 
+  const handleChatData = (chatId, chatSnapshot) => {
+    if (chatSnapshot.exists()) {
+      const chatData = { chatId, ...chatSnapshot.val() };
+      chatDataArray.push(chatData);
+    }
+  };
+
+  const handleUserChatIdsSnapshot = (snapshot) => {
+    if (snapshot.exists()) {
+      const chatIds = Object.keys(snapshot.val());
+      // Clear the array before fetching new data
+      chatDataArray.length = 0;
+
+      chatIds.forEach((chatId) => {
+        const chatRef = ref(db, `Chats/${chatId}`);
+        onValue(chatRef, (chatSnapshot) => {
+          
+          handleChatData(chatId, chatSnapshot);
+          // Update the state only once, after processing all chat data
+          if (chatDataArray.length === chatIds.length) {
+            const parsedChatData = ParseContentData(chatDataArray,"updatedAt",true);
+
+            const chatsWithLastMessage = parsedChatData.map((chat) => {
+              let lastMessage;
+            
+              if (!chat.messages || chat.messages.length === 0) {
+                lastMessage = "No message yet";
+              } else {
+                lastMessage = ParseContentData(chat.messages, "sendAt", true)[0];
+                // Update the chats updateAt field
+                update(ref(db, `Chats/${chat.chatId}`), {
+                  updatedAt: lastMessage.sendAt,
+                }).then(() => {
+                  console.log("Chat updated successfully");
+                })
+              }
+              return {
+                ...chat,
+                lastMessage,
+              };
+            });
+
+          setChats(chatsWithLastMessage);
+          setLoading(false);
+          }
+        });
+      });
+    } else {
+      setChats([]);
+      setLoading(false);
+    }
+  };
+
   const fetchChatData = () => {
     setLoading(true);
-    const chatDataArray = [];
-
-    const handleChatData = (chatId, chatSnapshot) => {
-      if (chatSnapshot.exists()) {
-        const chatData = { chatId, ...chatSnapshot.val() };
-        chatDataArray.push(chatData);
-      }
-    };
-
-    const handleUserChatIdsSnapshot = (snapshot) => {
-      if (snapshot.exists()) {
-        const chatIds = Object.keys(snapshot.val());
-        // Clear the array before fetching new data
-        chatDataArray.length = 0;
-
-        chatIds.forEach((chatId) => {
-          const chatRef = ref(db, `Chats/${chatId}`);
-          onValue(chatRef, (chatSnapshot) => {
-            
-            handleChatData(chatId, chatSnapshot);
-            // Update the state only once, after processing all chat data
-            if (chatDataArray.length === chatIds.length) {
-              const parsedChatData = ParseContentData(chatDataArray,"updatedAt",true);
-
-              const chatsWithLastMessage = parsedChatData.map((chat) => {
-                let lastMessage;
-              
-                if (!chat.messages || chat.messages.length === 0) {
-                  lastMessage = "No message yet";
-                } else {
-                  lastMessage = ParseContentData(chat.messages, "sendAt", true)[0];
-                  // Update the chats updateAt field
-                  update(ref(db, `Chats/${chat.chatId}`), {
-                    updatedAt: lastMessage.sendAt,
-                  })
-                }
-                return {
-                  ...chat,
-                  lastMessage,
-                };
-              });
-
-            setChats(chatsWithLastMessage);
-            setLoading(false);
-            }
-          });
-        });
-      } else {
-        setChats([]);
-        setLoading(false);
-      }
-    };
-
+    
     onValue(userChatIdsRef, handleUserChatIdsSnapshot);
   };
 

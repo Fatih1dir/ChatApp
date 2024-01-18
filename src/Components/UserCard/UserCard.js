@@ -11,8 +11,10 @@ const UserCard = ({ user }) => {
   const fetchUserData = async () => {
     setLoading(true);
     const usernameToFetch = user.item; // Replace with the desired username
+    // create a foreach loop for each user in user that comes as prop
     const userData = await getUserAttributesbyUsername(usernameToFetch);
-
+    
+    console.log(userData);
     if (userData) {
       const parsedUserData = ParseContentData(userData);
       setUser(parsedUserData);
@@ -33,7 +35,7 @@ const UserCard = ({ user }) => {
       {UserState.map((item) => (
         <View key={item.userid} style={styles.container}>
           <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: item.imageUrl }} />
+            <Image style={styles.image} source={{ uri: item.profilePic }} />
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.username}>{item.id}</Text>

@@ -34,7 +34,11 @@ function ChatCard({
         <Text style={styles.updatedAt}>{formattedDate}</Text>
       </View>
       <View style={styles.lastMessageContainer}>
-        <Text >{lastMessage.senderUsername}</Text>
+        {lastMessage.isAnonymous ? (
+          <Text>Anonim</Text>
+        ) : (
+          <Text>{lastMessage.senderUsername}</Text>
+        )}
         <Text style={styles.lastMessage}>{lastMessage ? lastMessage.message : "No message yet"}</Text>
       </View>
     </TouchableOpacity>

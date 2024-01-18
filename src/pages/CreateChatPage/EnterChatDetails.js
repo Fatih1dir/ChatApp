@@ -59,16 +59,23 @@ const EnterChatDetails = ({ route, navigation }) => {
   };
   const handleCreateChat=async()=>{
     // Upload the image to Firebase Storage
-    const response = await fetch(chatImage);
-    const blob = await response.blob();
-    const imageName = `${auth.currentUser.uid}_${Date.now()}.jpg`;
-    const storageReference = storageRef(storage, `images/${imageName}`);
-    await uploadBytes(storageReference, blob);
+    if (chatImage) {
+      const response = await fetch(chatImage);
+      const blob = await response.blob();
+      const imageName = `${auth.currentUser.uid}_${Date.now()}.jpg`;
+      const storageReference = storageRef(storage, `images/${imageName}`);
+      await uploadBytes(storageReference, blob);
 
     // Get the download URL of the uploaded image
-    const downloadURL = await getDownloadURL(storageReference);
-    createChat(auth.currentUser.uid,chatName,selectedUsers,downloadURL);
+      const downloadURL = await getDownloadURL(storageReference);
+      createChat(auth.currentUser.uid,chatName,selectedUsers,downloadURL);
+      
+    }
+    else{
+      createChat(auth.currentUser.uid,chatName,selectedUsers,"");
+    }
     navigation.navigate("Home");
+    
   }
 
   return (

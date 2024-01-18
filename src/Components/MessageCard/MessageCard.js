@@ -41,7 +41,10 @@ const MessageCard = ({message, currentUserId}) => {
       ]}
     >
       <View style={styles.inner_container}>
-        <Text style={styles.user}>{user.username}</Text>
+        {message.isAnonymous ? (
+          <Text style={styles.user}>Anonim</Text>
+        ):<Text style={styles.user}>{user.username}</Text>}
+        
         <Text style={styles.date}>{formattedData}</Text>
       </View>
       <Text style={styles.title}>{message.message}</Text>
