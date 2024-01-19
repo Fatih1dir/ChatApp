@@ -6,8 +6,9 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { showMessage} from "react-native-flash-message";
 
 // Create a new user function
-const signUserIn = async (email, password , {navigation}) => {
+const signUserIn = async (username, password , {navigation}) => {
   const auth = getAuth(app);
+  const email = username + "@chatapp.com";
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;

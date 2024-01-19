@@ -33,10 +33,10 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-firebaseConfig.js
 .gitignore
-metro.config.js
 
 # Gradle files
 .gradle/
 build/
+firebaseConfig.js
+metro.config.js

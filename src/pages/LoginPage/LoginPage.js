@@ -13,7 +13,7 @@ const LoginPage = ({ navigation }) => {
 
   const handleSubmit = (values) => {
     try {
-      signUserIn(values.email, values.password,{navigation});
+      signUserIn(values.username, values.password,{navigation});
       //navigation.navigate("Home");
     } catch (error) {
       console.log(error);
@@ -23,15 +23,15 @@ const LoginPage = ({ navigation }) => {
     <SafeAreaView>
       <View>
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ username: "", password: "" }}
           onSubmit={handleSubmit}
         >
           {({ handleChange, handleSubmit, values }) => (
             <View style={styles.body_container}>
               <Input
-                placeholder={"E-mail giriniz"}
-                value={values.email}
-                onType={handleChange("email")}
+                placeholder={"Kullanıcı adı giriniz"}
+                value={values.username}
+                onType={handleChange("username")}
               />
               <Input
                 placeholder={"Şifrenizi giriniz"}
