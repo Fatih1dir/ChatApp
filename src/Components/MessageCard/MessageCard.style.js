@@ -3,7 +3,7 @@ export default StyleSheet.create({
     container: {
         // Your common styles for the message card container
         padding: 10,
-        marginBottom: 5,
+        marginBottom: 20,
         borderRadius: 8,
         maxWidth: '80%', // Adjust the maximum width as needed
       },
@@ -39,6 +39,6 @@ export default StyleSheet.create({
   },
   justifyLeft: {
     alignSelf: "flex-start",
-    backgroundColor: "#e0e0e0", // Example background color for messages sent by others
+    backgroundColor: "#149ce0", // Example background color for messages sent by others
   },
 });

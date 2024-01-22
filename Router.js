@@ -33,12 +33,12 @@ const AuthorizationStack = () => {
       <Stack.Screen
         name="LoginPage"
         component={LoginPage}
-        options={{ title: "Login" }}
+        options={{ title: "Giriş Yap" }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUp}
-        options={{ title: "Sign up" }}
+        options={{ title: "Kayıt" }}
       />
     </Stack.Navigator>
   );
@@ -62,11 +62,11 @@ const UserStack = () => {
         name="Home"
         component={HomePage}
         options={({ navigation }) => ({
-          title: "Chats",
+          title: "Mesajlar",
           headerRight: () => (
             <View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                <Text style={{ color: "#3C3C3B" }}>Profile</Text>
+                <Text style={{ color: "#3C3C3B" }}>Profil</Text>
               </TouchableOpacity>
             </View>
           ),
@@ -75,27 +75,27 @@ const UserStack = () => {
       <Stack.Screen
         name="Profile"
         component={ProfilePage}
-        options={{ title: "Profile" }}
+        options={{ title: "Profil" }}
       />
       <Stack.Screen
         name="MessagesPage"
         component={MessagesPage}
-        options={{ title: "Messages" }}
+        options={{ title: "Mesajlar" }}
       />
       <Stack.Screen
         name="AddFriend"
         component={AddFriend}
-        options={{ title: "Add Friend" }}
+        options={{ title: "Arkadaş ekle" }}
       />
       <Stack.Screen
         name="CreateChat"
         component={CreateChat}
-        options={{ title: "Create a Chat" }}
+        options={{ title: "Mesaj oluştur" }}
       />
       <Stack.Screen
         name="EnterChatDetails"
         component={EnterChatDetails}
-        options={{ title: "Chat Details" }}
+        options={{ title: "Mesaj detayları" }}
       />
     </Stack.Navigator>
   );

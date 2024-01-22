@@ -46,12 +46,12 @@ function createChat(senderId, chatName, participants,chatImage) {
 
   // Push a new child to "Chats" and get its key (this will be your chat ID)
   const newChatKey = push(chatRef).key;
+  const updateDate = getDate();
 
   // Get the sender's username
   getUsername(senderId).then((senderUsername) => {
     if (senderUsername) {
       // Add chatId to sender's chatIds
-      const updateDate = getDate();
       set(ref(db, `users/${senderId}/chatIds/${newChatKey}/updateDate`), updateDate);
 
       const defaultChatName = `${senderUsername}'s chat`; // Set your default chat name here
@@ -70,9 +70,9 @@ function createChat(senderId, chatName, participants,chatImage) {
   });
   // Add chatId to the receivers' chatIds
   participants.forEach((receiverUsername) => {
-    getUserId(receiverUsername).then((receiverUsername) => {
-      if (receiverUsername) {
-        set(ref(db, `users/${receiverUsername}/chatIds/${newChatKey}/updateDate`), updateDate);
+    getUserId(receiverUsername).then((receiverUserid) => {
+      if (receiverUserid) {
+        set(ref(db, `users/${receiverUserid}/chatIds/${newChatKey}/updateDate`), updateDate);
       } else {
         console.log("Receivers userId not found.");
       }

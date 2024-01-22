@@ -44,14 +44,14 @@ const LoginPage = ({ navigation }) => {
                   style={styles.signUpButton}
                   onPress={() => handleSubmit(values)}
                 >
-                  <Text style={styles.signUpButtonText}>Login</Text>
+                  <Text style={styles.signUpButtonText}>Giriş Yap</Text>
                 </TouchableOpacity>
               </View>
             </View>
           )}
         </Formik>
         <Text style={{ textAlign: "center" }}>
-          If you don't have an account
+          Eğer hesabınız yoksa
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -59,7 +59,7 @@ const LoginPage = ({ navigation }) => {
           style={styles.signUpButton}
           onPress={signUpButtonHandle}
         >
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
+          <Text style={styles.signUpButtonText}>Kayıt Ol</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

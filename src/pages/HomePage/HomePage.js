@@ -27,14 +27,14 @@ const HomePage = ({ navigation }) => {
   const actions = [
     {
       icon:require("../../../assets/add_chat_Icon.png"),
-      text: 'Add Chat',
+      text: 'Mesaj oluştur',
       name: 'add_chat',
       position: 1,
       color:"#82368C"
     },
     {
       icon:require("../../../assets/add_friend_Icon.png"),
-      text: 'Add Friend',
+      text: 'Arkadaş ekle',
       name: 'add_friend',
       position: 2,
       color:"#82368C"

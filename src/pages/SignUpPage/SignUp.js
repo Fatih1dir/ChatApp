@@ -66,14 +66,14 @@ const SignUp = ({ navigation }) => {
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.loginButton} onPress={() => handleSubmit(values)}>
-                  <Text style={styles.loginButtonText}>Sign Up</Text>
+                  <Text style={styles.loginButtonText}>Kayıt Ol</Text>
                 </TouchableOpacity>
               </View>
             </View>
           )}
         </Formik>
         <Text style={{ textAlign: "center" }}>
-          Or if you are already registered
+          Zaten hesabınız var mı?
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -81,7 +81,7 @@ const SignUp = ({ navigation }) => {
           style={styles.loginButton}
           onPress={loginButtonHandle}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>Giriş Yap</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

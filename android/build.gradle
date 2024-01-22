@@ -1,11 +1,9 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
-        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')
-        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '33')
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34') // Updated to 34
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34') // You may want to update this to 34 as well
         kotlinVersion = findProperty('android.kotlinVersion') ?: '1.8.10'
         frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
 

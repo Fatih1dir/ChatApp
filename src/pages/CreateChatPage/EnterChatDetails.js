@@ -80,21 +80,23 @@ const EnterChatDetails = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => pickImage()}
+      <View
         style={styles.imageContainer}
       >
         {chatImage ? (
           <Image source={{ uri: chatImage }} style={styles.selectedImage} />
         ) : (
-          <Icon
-            name="person-outline"
-            size={100}
-            color="#000"
-            style={{ alignSelf: "center", margin: 5 }}
-          />
+          <View style={styles.blankProfileCircle} />
         )}
-      </TouchableOpacity>
+        <View style={styles.cameraIconContainer}>
+            <Icon
+              name="camera"
+              size={25}
+              color="#1ac0c6"
+              onPress={()=>pickImage()}
+            />
+          </View>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Enter Chat Name"
@@ -132,6 +134,22 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderRadius: 60,
+  },
+  cameraIconContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'grey',
+    borderRadius: 15, // Adjust the value as needed
+    padding: 5,
+  },
+  blankProfileCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "white",
+    borderWidth: 0.5,
+    borderColor: "grey",
   },
   selectedImage: {
     width: 100,
