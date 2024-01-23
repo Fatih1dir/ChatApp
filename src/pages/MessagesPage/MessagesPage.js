@@ -20,7 +20,7 @@ import { showMessage} from "react-native-flash-message";
 function MessagesPage({ route }) {
   const flatListRef = React.useRef();
   const db = getDatabase();
-  const messagesId = route.params;
+  const messagesId = route.params.chatId;
   const auth = getAuth(app);
   const [value, setValue] = React.useState("");
   const [messages, setMessages] = React.useState({});

@@ -4,14 +4,16 @@ export default styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     padding: 16,
+    backgroundColor:"lightgrey"
   },
   messagesContainer: {
     flex: 1,
   },
   inputContainer: {
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopWidth: 0.5,
+    borderTopColor: "black",
     padding: 8,
+    borderColor:"black",
   },
   input: {
     flex: 1,
@@ -35,5 +37,14 @@ export default styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     paddingHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 6,
+    
   },
 });

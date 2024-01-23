@@ -50,5 +50,20 @@ export default styles = StyleSheet.create({
   },
   lastMessageContainer:{
     flexDirection:"row",
+  },
+  blankProfileCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "grey",
+    marginRight: 10
+  },
+  username: {
+    fontWeight: "bold",
+    marginRight: 5,
+    marginTop: 2,
+    
   }
 });

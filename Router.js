@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomePage } from "./src/pages/HomePage/HomePage";
@@ -13,6 +13,7 @@ import Loading from "./src/Components/Loading/Loading";
 import AddFriend from "./src/pages/AddFriendPage/AddFriend";
 import CreateChat from "./src/pages/CreateChatPage/CreateChat";
 import EnterChatDetails from "./src/pages/CreateChatPage/EnterChatDetails";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +67,8 @@ const UserStack = () => {
           headerRight: () => (
             <View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-                <Text style={{ color: "#3C3C3B" }}>Profil</Text>
+                {/* <Text style={{ color: "#3C3C3B" }}>Profil</Text> */}
+                <Icon name="account-cowboy-hat"  size={40} color="#3C3C3B" />
               </TouchableOpacity>
             </View>
           ),
@@ -80,7 +82,7 @@ const UserStack = () => {
       <Stack.Screen
         name="MessagesPage"
         component={MessagesPage}
-        options={{ title: "Mesajlar" }}
+        options={({ route }) => ({ title: route.params.name })}
       />
       <Stack.Screen
         name="AddFriend"

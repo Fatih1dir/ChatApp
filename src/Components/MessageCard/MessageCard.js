@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity,Image} from 'react-native';
 import styles from './MessageCard.style';
 import {formatDistance, parseISO} from 'date-fns';
 import tr from 'date-fns/locale/tr';
 import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 const MessageCard = ({message, currentUserId}) => {
   const parsedDate = message.sendAt ? parseISO(message.sendAt) : null;
@@ -40,6 +42,7 @@ const MessageCard = ({message, currentUserId}) => {
         isCurrentUserMessage ? styles.justifyRight : styles.justifyLeft,
       ]}
     >
+      
       <View style={styles.inner_container}>
         {message.isAnonymous ? (
           <Text style={styles.user}>Anonim</Text>

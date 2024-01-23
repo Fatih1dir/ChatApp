@@ -52,8 +52,8 @@ const HomePage = ({ navigation }) => {
     }
   };
 
-  const handleChatCardPress=(pressedChatId)=>{
-    navigation.navigate("MessagesPage",pressedChatId);
+  const handleChatCardPress=(pressedChat)=>{
+    navigation.navigate("MessagesPage",pressedChat);
   }
 
   const handleModalSend = (username, chatname) => {
@@ -147,7 +147,7 @@ const HomePage = ({ navigation }) => {
               participants={item.participants}
               updatedAt={item.updatedAt}
               lastMessage={item.lastMessage}
-              onPress={()=>handleChatCardPress(item.chatId)}
+              onPress={()=>handleChatCardPress(item)}
             />
           )}
           style={styles.flatListContainer}
