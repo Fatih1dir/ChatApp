@@ -39,7 +39,6 @@ export default StyleSheet.create({
     backgroundColor: "#1ac0c6", // Example background color for messages sent by the current user
   },
   justifyLeft: {
-    alignSelf: "flex-start",
     backgroundColor: "#149ce0", // Example background color for messages sent by others
   },
   image_container: {
