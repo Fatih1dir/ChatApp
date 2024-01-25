@@ -1,12 +1,7 @@
 import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
-    // Your common styles for the message card container
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 8,
-    maxWidth: "80%", // Adjust the maximum width as needed
-    
+    fontSize:12
   },
   inner_container: {
     justifyContent: "space-between",
@@ -15,13 +10,14 @@ export default StyleSheet.create({
   user: {
     color: "black",
     padding: 5,
+    fontStyle:'italic'
   },
   date: {
     color: "white",
     padding: 5,
     fontStyle: "italic",
   },
-  title: {
+  message: {
     color: "white",
     padding: 5,
   },
@@ -36,10 +32,9 @@ export default StyleSheet.create({
   },
   justifyRight: {
     alignSelf: "flex-end",
-    backgroundColor: "#1ac0c6", // Example background color for messages sent by the current user
   },
   justifyLeft: {
-    backgroundColor: "#149ce0", // Example background color for messages sent by others
+    alignSelf: "flex-start",
   },
   image_container: {
     alignItems: "center",
@@ -53,4 +48,7 @@ export default StyleSheet.create({
     borderColor: "grey",
     marginRight: 10,
   },
+  bubble:{
+    
+  }
 });

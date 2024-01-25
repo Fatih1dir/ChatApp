@@ -3,7 +3,7 @@ export default styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    padding: 16,
+    padding: 12,
     backgroundColor:"lightgrey"
   },
   messagesContainer: {
@@ -12,12 +12,13 @@ export default styles = StyleSheet.create({
   inputContainer: {
     borderTopWidth: 0.5,
     borderTopColor: "black",
-    padding: 8,
+    paddingTop: 8,
+    paddingHorizontal:8,
     borderColor:"black",
   },
   input: {
     flex: 1,
-    height: 40,
+    height: 60,
     paddingHorizontal: 8,
     marginRight: 8,
   },

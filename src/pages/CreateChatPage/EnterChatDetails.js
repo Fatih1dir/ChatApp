@@ -30,7 +30,7 @@ const EnterChatDetails = ({ route, navigation }) => {
   const [chatImage, setChatImage] = useState(null);
   const [chatName, setChatName] = useState("");
   const { selectedUsers } = route.params;
-
+  
   React.useEffect(() => {
     (async () => {
       const galleryStatus =
@@ -99,12 +99,12 @@ const EnterChatDetails = ({ route, navigation }) => {
       </View>
       <TextInput
         style={styles.input}
-        placeholder="Enter Chat Name"
+        placeholder="Mesaj ismi giriniz"
         onChangeText={(text) => setChatName(text)}
         value={chatName}
       />
       <View style={{ flexDirection: "row"}}>
-        <Text>Participants</Text>
+        <Text>Katılımcılar</Text>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 , borderWidth: 1, borderRadius: 5, backgroundColor: "#2286c3",paddingHorizontal: 5}}>
           <Text style={{color: "white"}}>Düzenle</Text>
         </TouchableOpacity>

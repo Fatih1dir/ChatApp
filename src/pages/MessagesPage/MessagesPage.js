@@ -15,10 +15,10 @@ import { SendMessage } from "../../Controllers/SendMessageController";
 import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
 import ParseContentData from "../../Controllers/ParseContentData";
 import MessageCard from "../../Components/MessageCard/MessageCard";
-import { showMessage} from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 
 function MessagesPage({ route }) {
-  const flatListRef = React.useRef();
+  const participantsNum = route.params.participants.length;
   const db = getDatabase();
   const messagesId = route.params.chatId;
   const auth = getAuth(app);
@@ -32,7 +32,7 @@ function MessagesPage({ route }) {
 
   const handleMessageSend = (messagesId, senderId, content) => {
     setValue("");
-    SendMessage(messagesId, senderId, content,isAnonymous);
+    SendMessage(messagesId, senderId, content, isAnonymous);
   };
 
   const getMessages = () => {
@@ -46,24 +46,29 @@ function MessagesPage({ route }) {
   };
 
   const toggleAnonymousMode = () => {
-    setIsAnonymous(!isAnonymous);
-    if (!isAnonymous) {
-      showMessage({
-        message: "Anonim mesaj moduna geçtiniz",
-        type: "info",
-        icon: "info",
-        duration: 3000
-      });
+    if (participantsNum > 2) {
+      setIsAnonymous(!isAnonymous);
+      if (!isAnonymous) {
+        showMessage({
+          message: "Anonim mesaj moduna geçtiniz",
+          type: "info",
+          icon: "info",
+          duration: 3000,
+        });
+      }
     }
-  }
+  };
 
   React.useEffect(() => {
-    showMessage({
-      message: "Gönder butonuna uzun basarak anonim mesaj gönderebilirsiniz",
-      type: "info",
-      icon: "info",
-      duration: 3000
-    });
+    if(participantsNum > 2) {
+      showMessage({
+        message: "Gönder butonuna uzun basarak anonim mesaj gönderebilirsiniz",
+        type: "info",
+        icon: "info",
+        duration: 3000,
+      });
+    }
+    
     getMessages();
   }, []);
 
@@ -85,7 +90,7 @@ function MessagesPage({ route }) {
               this.flatList.scrollToEnd({ animated: false })
             }
             onLayout={() => this.flatList.scrollToEnd({ animated: false })}
-          ></FlatList>
+          />
         )}
       </View>
 
@@ -96,6 +101,8 @@ function MessagesPage({ route }) {
             placeholder={"Bir mesaj gönderin"}
             onChangeText={onType}
             value={value}
+            multiline
+            numberOfLines={3}
           />
           <TouchableOpacity
             onPress={() => {
@@ -106,7 +113,11 @@ function MessagesPage({ route }) {
               toggleAnonymousMode();
             }}
           >
-            {isAnonymous ? <Icon name={"eye"} size={25} color="black" /> :<Icon name={"send"} size={25} color="#1ac0c6" />}
+            {isAnonymous ? (
+              <Icon name={"eye"} size={25} color="black" />
+            ) : (
+              <Icon name={"send"} size={25} color="#1ac0c6" />
+            )}
           </TouchableOpacity>
         </View>
       </View>

@@ -30,4 +30,7 @@ export default styles = StyleSheet.create({
   buttonContainer: {
     marginRight: 10,
   },
+  blankProfileCircle: {
+    
+  }
   });

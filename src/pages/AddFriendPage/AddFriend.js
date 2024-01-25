@@ -11,6 +11,7 @@ import { showMessage } from 'react-native-flash-message';
 const AddFriend = () => {
   const [searchText, setSearchText] = useState("");
   const [usernames, setUsernames] = useState([]);
+  const [friends, setFriends] = useState([]); // Array to store friends' usernames
   const auth = getAuth(app);
   const db = getDatabase();
   const usernamesRef = ref(db, "usernames");
@@ -40,8 +41,28 @@ const AddFriend = () => {
       console.error("Error fetching data:", error);
     }
   };
+  const fetchFriends = async () => {
+    try {
+      const friendsRef = ref(
+        getDatabase(app),
+        `users/${auth.currentUser.uid}/friends`
+      );
+      const friendsSnapshot = await get(friendsRef);
+
+      if (friendsSnapshot.exists()) {
+        const friendsData = friendsSnapshot.val();
+        const friendsArray = Object.values(friendsData);
+        setFriends(friendsArray);
+      } else {
+        setFriends([]);
+      }
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
   useEffect(() => {
     fetchData();
+    fetchFriends();
   }, []);
 
   const filterUsernames = () => {
@@ -57,12 +78,12 @@ const AddFriend = () => {
 
       // Handle success (you can show a success message or navigate to a different screen)
       showMessage({
-        message: `${friendUserId.username} added as friend.`,
+        message: `${friendUserId.username} artık arkadaşınız.`,
         type: 'success',
       });
     } catch (error) {
       showMessage({
-        message: `Friend couldn't added. Try again later.`,
+        message: `Arkadaş eklenemedi. Lütfen sonra tekrar deneyin.`,
         type: 'danger',
       });
     }
@@ -71,7 +92,7 @@ const AddFriend = () => {
   return (
     <View>
       <TextInput style={styles.searchInput}
-        placeholder="Enter a username to search"
+        placeholder="Bir kullanıcı adı girerek arkadaş ekleyin."
         value={searchText}
         onChangeText={(text) => setSearchText(text)}
       />
@@ -80,7 +101,7 @@ const AddFriend = () => {
           data={filterUsernames()}
           keyExtractor={(item) => item.userid}
           renderItem={({ item }) => (
-            <AddFriendCard user={item} onAddFriend={()=>handleAddFriend(item)}/>
+            <AddFriendCard user={item} onAddFriend={()=>handleAddFriend(item)} friends={friends}/>
           )}
         />
       )}

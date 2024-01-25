@@ -33,28 +33,26 @@ const CreateChat = ({navigation}) => {
     
   };
 
-  React.useEffect(() => {
-    // Fetch friends from the database and set them to the state
-    const fetchData = async () => {
-      try {
-        const friendsRef = ref(
-          getDatabase(app),
-          `users/${auth.currentUser.uid}/friends`
-        );
-        const friendsSnapshot = await get(friendsRef);
+  const fetchData = async () => {
+    try {
+      const friendsRef = ref(
+        getDatabase(app),
+        `users/${auth.currentUser.uid}/friends`
+      );
+      const friendsSnapshot = await get(friendsRef);
 
-        if (friendsSnapshot.exists()) {
-          const friendsData = friendsSnapshot.val();
-          const friendsArray = Object.values(friendsData);
-          setFriends(friendsArray);
-        } else {
-          setFriends([]);
-        }
-      } catch (error) {
-        console.error("Error fetching friends:", error);
+      if (friendsSnapshot.exists()) {
+        const friendsData = friendsSnapshot.val();
+        const friendsArray = Object.values(friendsData);
+        setFriends(friendsArray);
+      } else {
+        setFriends([]);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+  React.useEffect(() => {
     fetchData();
   }, []);
 
@@ -82,7 +80,7 @@ const CreateChat = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Add your friends to chat</Text>
+      <Text>Mesaja eklemek istediğiniz arkadaşlarınız seçin</Text>
       <FlatList
         data={friends}
         keyExtractor={(item) => item}

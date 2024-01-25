@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from "react-native";
 import styles from "../ChatCard/ChatCard.style";
 import { formatDistance, parseISO } from "date-fns";
 import tr from "date-fns/locale/tr";
@@ -13,10 +13,33 @@ function ChatCard({
   chatImage,
   onPress,
 }) {
+  const [maxLength, setMaxLength] = React.useState(40);
   const formattedDate = formatDistance(parseISO(updatedAt), new Date(), {
     addSuffix: true,
     locale: tr,
   });
+
+  // Function to truncate the message to a specified length
+  const truncateMessage = (message, maxLength) => {
+    const truncatedMessage = message.substring(0, maxLength - 3);
+    return truncatedMessage.length < message.length ? truncatedMessage + "..." : truncatedMessage;
+  };
+
+  React.useEffect(() => {
+    if (lastMessage.message) {
+      const screenWidth = Dimensions.get("window").width;
+
+      // Set a default value for the maximum length
+      let newMaxLength = 30;
+
+      // You can adjust the logic based on your layout requirements
+      if ((lastMessage.message.length + lastMessage.senderUsername.length) > 20 && screenWidth > 0) {
+        // Adjust the formula based on your specific requirements
+        newMaxLength = Math.floor((screenWidth / 10) * 4);
+        setMaxLength(newMaxLength);
+      }
+    }
+  }, [lastMessage.message]);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -41,16 +64,20 @@ function ChatCard({
         </View>
         <Text style={styles.updatedAt}>{formattedDate}</Text>
       </View>
-      <View style={styles.lastMessageContainer}>
+      {lastMessage.message ? <View style={styles.lastMessageContainer}>
         {lastMessage.isAnonymous ? (
-          <Text>Anonim</Text>
+          <Text style={styles.username}>Anonim:</Text>
         ) : (
-          <Text style={styles.username}>{lastMessage.senderUsername}</Text>
+          <Text style={styles.username}>{lastMessage.senderUsername}:</Text>
         )}
         <Text style={styles.lastMessage}>
-          {lastMessage ? lastMessage.message : "No message yet"}
+          {truncateMessage(lastMessage.message, 30)}
         </Text>
-      </View>
+      </View> : ( 
+        <Text style={{}}>
+      </Text>
+      )}
+      
     </TouchableOpacity>
   );
 }

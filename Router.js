@@ -68,7 +68,7 @@ const UserStack = () => {
             <View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 {/* <Text style={{ color: "#3C3C3B" }}>Profil</Text> */}
-                <Icon name="account-cowboy-hat"  size={40} color="#3C3C3B" />
+                <Icon name="account-cowboy-hat"  size={30} color="#3C3C3B" />
               </TouchableOpacity>
             </View>
           ),

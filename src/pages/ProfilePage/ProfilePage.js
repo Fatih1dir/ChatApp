@@ -27,6 +27,8 @@ import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
 import { getDate } from "date-fns";
+import { showMessage} from "react-native-flash-message";
+
 const auth = getAuth(app);
 
 const ProfilePage = ({ navigation }) => {
@@ -89,10 +91,17 @@ const ProfilePage = ({ navigation }) => {
 
     update(userRef, userData)
       .then(() => {
-        console.log("User data updated successfully!");
+        showMessage({
+          message: "Profil değişiklikleriniz kaydedildi.",
+          type: "success",
+        });
+        navigation.navigate("Home");
       })
       .catch((error) => {
-        console.error("Error updating user data:", error);
+        showMessage({
+          message: "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.",
+          type: "danger",
+        });
       });
   };
 
@@ -221,6 +230,8 @@ const ProfilePage = ({ navigation }) => {
             mode="date"
             display="spinner"
             onChange={handleDateChange}
+            style={{backgroundColor:"white"}}
+            
           />
         )}
         
@@ -241,7 +252,7 @@ const ProfilePage = ({ navigation }) => {
               onValueChange={(itemValue) => setSex(itemValue)}
               style={styles.picker}
             >
-              <Picker.Item label="Select Gender" value="" enabled={false} />
+              <Picker.Item label="Cinsiyet" value="" enabled={false} />
               <Picker.Item label="Erkek" value="Erkek" />
               <Picker.Item label="Kadın" value="Kadın" />
             </Picker>
