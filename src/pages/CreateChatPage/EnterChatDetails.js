@@ -113,7 +113,7 @@ const EnterChatDetails = ({ route, navigation }) => {
       <FlatList 
         style={{ maxHeight: 60, marginTop: 10 }}
         data={selectedUsers}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.userid}
         renderItem={(item)=><UserCard user={item}></UserCard>}
         horizontal
       />

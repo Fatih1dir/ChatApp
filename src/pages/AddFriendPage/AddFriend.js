@@ -14,7 +14,7 @@ const AddFriend = () => {
   const [friends, setFriends] = useState([]); // Array to store friends' usernames
   const auth = getAuth(app);
   const db = getDatabase();
-  const usernamesRef = ref(db, "usernames");
+  const usernamesRef = ref(db, "users");
 
   // Fetch usernames from your database and set them to the state
   const fetchData = async () => {
@@ -27,7 +27,7 @@ const AddFriend = () => {
           // Extract usernames from the objects and filter out non-strings
           const usernamesArray = Object.keys(data).map(key=>{
               return{
-                  username:key,
+                  userid:key,
                   ...data[key],
               }
           })
@@ -74,7 +74,7 @@ const AddFriend = () => {
   const handleAddFriend = async (friendUserId) => {
     try {
       // Update the current user's data with the friend's userid
-      await set(ref(db,`users/${auth.currentUser.uid}/friends/${friendUserId.userid}`), friendUserId.username);
+      await set(ref(db,`users/${auth.currentUser.uid}/friends/${friendUserId.userid}`), friendUserId);
 
       // Handle success (you can show a success message or navigate to a different screen)
       showMessage({

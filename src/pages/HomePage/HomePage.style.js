@@ -20,5 +20,14 @@ export default styles = StyleSheet.create({
     minWidth: 200,
     marginVertical: 10, // Adjust as needed
   },
+  text: {
+    fontSize: 15,
+    textAlign: "center",
+    color: "black",
+    paddingTop: 20,
+    position: "relative",
+    top: 200,
+    
+  }
   });
   

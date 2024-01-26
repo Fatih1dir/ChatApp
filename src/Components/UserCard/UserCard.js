@@ -1,48 +1,56 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity,ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import styles from "./UserCard.style";
-import { getUserAttributesbyUsername } from "../../Controllers/User";
-import Loading from "../Loading/Loading";
-import ParseContentData from "../../Controllers/ParseContentData";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const UserCard = ({ user }) => {
-  const [UserState, setUser] = React.useState({});
+  const [item, setItem] = React.useState({});
   const [loading, setLoading] = React.useState(true);
-  const fetchUserData = async () => {
-    setLoading(true);
-    const usernameToFetch = user.item; // Replace with the desired username
-    // create a foreach loop for each user in user that comes as prop
-    const userData = await getUserAttributesbyUsername(usernameToFetch);
-    
-    console.log(userData);
-    if (userData) {
-      const parsedUserData = ParseContentData(userData);
-      setUser(parsedUserData);
-      setLoading(false);
-    } else {
-      console.log("User not found or error occurred.");
-    }
-  };
+  //setItem(user.item);
+  // const fetchUserData = async () => {
+  //   setLoading(true);
+  //   const usernameToFetch = user.item; // Replace with the desired username
+  //   // create a foreach loop for each user in user that comes as prop
+  //   const userData = await getUserAttributesbyUsername(usernameToFetch);
+
+  //   console.log(userData);
+  //   if (userData) {
+  //     const parsedUserData = ParseContentData(userData);
+  //     setUser(parsedUserData);
+  //     setLoading(false);
+  //   } else {
+  //     console.log("User not found or error occurred.");
+  //   }
+  // };
+  // React.useEffect(() => {
+  //   fetchUserData();
+  // }, []);
+  // if (loading) {
+  //   return <Loading></Loading>;
+  // }
   React.useEffect(() => {
-    fetchUserData();
-  }, []);
-  if (loading) {
-    return <Loading></Loading>;
-  }
+    setItem(user.item);
+  },[user])
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-      {UserState.map((item) => (
-        <View key={item.userid} style={styles.container}>
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: item.profilePic }} />
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.username}>{item.id}</Text>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
+    <View key={item.userid} style={styles.container}>
+      <View style={styles.imageContainer}>
+        {item.profilePic ? (
+          <Image style={styles.image} source={{ uri: item.profilePic }} />
+        ) : (
+          <Icon
+            style={styles.blankProfileCircle}
+            size={50}
+            name="account"
+            color="#1ac0c6"
+          ></Icon>
+        )}
+        
+      </View>
+      <View style={styles.userInfo}>
+        <Text style={styles.username}>{item.username}</Text>
+      </View>
+    </View>
   );
 };
 

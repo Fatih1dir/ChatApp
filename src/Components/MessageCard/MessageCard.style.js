@@ -3,6 +3,8 @@ export default StyleSheet.create({
   container: {
     fontSize:12
   },
+  ImageContainer: {
+  },
   inner_container: {
     justifyContent: "space-between",
     flexDirection: "row",
@@ -40,9 +42,9 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   blankProfileCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
+    width: 30,
+    height: 30,
+    borderRadius: 30,
     backgroundColor: "white",
     borderWidth: 1,
     borderColor: "grey",

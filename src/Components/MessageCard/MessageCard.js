@@ -36,19 +36,56 @@ const MessageCard = ({ message, currentUserId }) => {
   }, []);
 
   return (
-    <View>
-    <ChatBubble
-      isOwnMessage={isCurrentUserMessage}
-      {...isCurrentUserMessage ? {bubbleColor:"#1084ff"}: {bubbleColor:"#149ce0"}}
-      {...isCurrentUserMessage ? {tailColor:"#1084ff"}: {tailColor:"#149ce0"}}
-      withTail={true}
-    >
-      {message.isAnonymous ? (
+    <View >
+      <ChatBubble
+        isOwnMessage={isCurrentUserMessage}
+        {...(isCurrentUserMessage
+          ? { bubbleColor: "#1084ff" }
+          : { bubbleColor: "#149ce0" })}
+        {...(isCurrentUserMessage
+          ? { tailColor: "#1084ff" }
+          : { tailColor: "#149ce0" })}
+        withTail={true}
+      >
+        {message.isAnonymous ? (
           <Text style={styles.user}>Anonim</Text>
-        ):<Text style={styles.user}>{user.username}</Text>}
-      <Text style={styles.message}>{message.message}</Text>
-    <Text style={[styles.container,isCurrentUserMessage ? styles.justifyRight : styles.justifyLeft]}>{formattedData}</Text>
-    </ChatBubble>
+        ) : (
+          <Text style={styles.user}>{user.username}</Text>
+        )}
+        <Text style={styles.message}>{message.message}</Text>
+        <Text
+          style={[
+            styles.container,
+            isCurrentUserMessage ? styles.justifyRight : styles.justifyLeft,
+          ]}
+        >
+          {formattedData}
+        </Text>
+      </ChatBubble>
+      {/* <View
+      style={[
+        isCurrentUserMessage ? {marginRight: 0} : {marginLeft: 0},
+        isCurrentUserMessage ? styles.justifyRight : styles.justifyLeft,
+      ]}
+      >
+        {message.isAnonymous ? (
+          <Icon
+            style={styles.blankProfileCircle}
+            size={30}
+            name="account"
+            color="#1ac0c6"
+          />
+        ) : user.profilePic ? (
+          <Image style={styles.blankProfileCircle} source={{ uri: user.profilePic }} />
+        ) : (
+          <Icon
+            style={styles.blankProfileCircle}
+            size={30}
+            name="account"
+            color="#1ac0c6"
+          />
+        )}
+      </View> */}
     </View>
     // <View
     //   style={[

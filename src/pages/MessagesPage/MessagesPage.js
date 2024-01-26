@@ -46,11 +46,19 @@ function MessagesPage({ route }) {
   };
 
   const toggleAnonymousMode = () => {
-    if (participantsNum > 2) {
+    if (participantsNum == 2) {
       setIsAnonymous(!isAnonymous);
       if (!isAnonymous) {
         showMessage({
-          message: "Anonim mesaj moduna geçtiniz",
+          message: "Anonim mesaj moduna geçtiniz. Kullanıcılar mesajı sizin gönderdiğinizi bilmeyecek.",
+          type: "info",
+          icon: "info",
+          duration: 3000,
+        });
+      }
+      else{
+        showMessage({
+          message: "Anonim mesaj modundan çıktınız.",
           type: "info",
           icon: "info",
           duration: 3000,
@@ -73,7 +81,7 @@ function MessagesPage({ route }) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[isAnonymous ? styles.anonymousContainer : styles.container]}>
       <View style={styles.messagesContainer}>
         {messages.length > 0 && (
           <FlatList
@@ -95,14 +103,15 @@ function MessagesPage({ route }) {
       </View>
 
       <View style={styles.inputContainer}>
-        <View style={styles.inputTextcontainer}>
+        <View style={[isAnonymous ? styles.anonymousInputContainer : styles.inputTextcontainer]}>
           <TextInput
-            style={styles.input}
+            style={[isAnonymous ? styles.anonymousInput : styles.input]}
             placeholder={"Bir mesaj gönderin"}
             onChangeText={onType}
             value={value}
             multiline
             numberOfLines={3}
+            placeholderTextColor={isAnonymous ? "white" : "grey"}
           />
           <TouchableOpacity
             onPress={() => {
@@ -114,7 +123,7 @@ function MessagesPage({ route }) {
             }}
           >
             {isAnonymous ? (
-              <Icon name={"eye"} size={25} color="black" />
+              <Icon name={"send"} size={25} color="black" />
             ) : (
               <Icon name={"send"} size={25} color="#1ac0c6" />
             )}
