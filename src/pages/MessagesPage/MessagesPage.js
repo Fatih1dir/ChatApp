@@ -46,7 +46,7 @@ function MessagesPage({ route }) {
   };
 
   const toggleAnonymousMode = () => {
-    if (participantsNum == 2) {
+    if (participantsNum > 2) {
       setIsAnonymous(!isAnonymous);
       if (!isAnonymous) {
         showMessage({

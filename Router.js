@@ -24,7 +24,7 @@ const AuthorizationStack = () => {
         headerStyle: {
           backgroundColor: "#82368C",
         },
-        headerTintColor: "#3C3C3B",
+        headerTintColor: "#FFFFFF",
         headerTitleStyle: {
           fontWeight: "bold",
         },
@@ -52,7 +52,7 @@ const UserStack = () => {
         headerStyle: {
           backgroundColor: "#82368C",
         },
-        headerTintColor: "#3C3C3B",
+        headerTintColor: "#FFFFFF",
         headerTitleStyle: {
           fontWeight: "bold",
         },
@@ -68,7 +68,7 @@ const UserStack = () => {
             <View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 {/* <Text style={{ color: "#3C3C3B" }}>Profil</Text> */}
-                <Icon name="account-cowboy-hat"  size={30} color="#3C3C3B" />
+                <Icon name="account-cowboy-hat"  size={30} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           ),

@@ -2,7 +2,7 @@ import { getDatabase, ref, push, set, get } from "firebase/database";
 
 async function getUsername(senderId) {
   const db = getDatabase();
-  const senderRef = ref(db, `users/${senderId}/username`);
+  const senderRef = ref(db, `users/${senderId}`);
 
   try {
     const snapshot = await get(senderRef);
@@ -54,7 +54,7 @@ function createChat(senderId, chatName, participants,chatImage) {
       // Add chatId to sender's chatIds
       set(ref(db, `users/${senderId}/chatIds/${newChatKey}/updateDate`), updateDate);
 
-      const defaultChatName = `${senderUsername}'s chat`; // Set your default chat name here
+      const defaultChatName = `${senderUsername.username}'s chat`; // Set your default chat name here
       const chatData = {
         name: chatName || defaultChatName, // Use the provided chatName or default chat name
         participants: [senderUsername, ...participants], // Include the sender and other participants
@@ -70,7 +70,7 @@ function createChat(senderId, chatName, participants,chatImage) {
   });
   // Add chatId to the receivers' chatIds
   participants.forEach((receiverUsername) => {
-    getUserId(receiverUsername).then((receiverUserid) => {
+    getUserId(receiverUsername.username).then((receiverUserid) => {
       if (receiverUserid) {
         set(ref(db, `users/${receiverUserid}/chatIds/${newChatKey}/updateDate`), updateDate);
       } else {

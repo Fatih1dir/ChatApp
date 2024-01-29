@@ -56,10 +56,7 @@ function ChatCard({
             ></Icon>
           )}
           <View>
-            <Text style={styles.chatName}>{chatName}</Text>
-            {/* <Text style={styles.participants}>
-              {"(" + participants.join(", ") + ")"}
-            </Text> */}
+            <Text style={styles.chatName}>{truncateMessage(chatName, 20)}</Text>
           </View>
         </View>
         <Text style={styles.updatedAt}>{formattedDate}</Text>

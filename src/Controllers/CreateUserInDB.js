@@ -46,23 +46,23 @@ async function writeUserData(userId, name) {
       
 
       showMessage({
-        message: 'User data saved successfully',
+        message: `Hoşgeldiniz ${name}`,
         type: 'success',
       });
     } catch (error) {
       showMessage({
-        message: 'Failed to save user data',
+        message: 'Hata oluştu. Lütfen daha sonra tekrar deneyin.',
         type: 'danger',
       });
     }
   }
   if(!isUsernameUnique){
     showMessage({
-      message: 'Username is already in use',
+      message: 'Kullanıcı adı kullanılıyor. Farklı bir kullanıcı adı deneyin.',
       type: 'danger',
     });
   }
 }
 
 
-export { writeUserData };
+export { writeUserData,isUsernameEmailUnique };

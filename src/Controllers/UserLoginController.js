@@ -19,7 +19,7 @@ const signUserIn = async (username, password , {navigation}) => {
     });
   } catch (error) {
     showMessage({
-      message: error.code,
+      message: "Kullanıcı adı veya şifre hatalı. Lütfen tekrar deneyin.",
       type: "danger",
     });
   }

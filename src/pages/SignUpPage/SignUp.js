@@ -5,9 +5,6 @@ import styles from "./SignUp.style";
 import { Formik } from "formik";
 import { showMessage} from "react-native-flash-message";
 
-import { app } from '../../../firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-
 import { registerUser } from '../../Controllers/UserRegistration';
 
 const SignUp = ({ navigation }) => {
@@ -17,6 +14,18 @@ const SignUp = ({ navigation }) => {
   };
 
   const handleSubmit = (values) => {
+
+    const isUsernameValid = /^[a-zA-Z0-9_]+$/.test(values.username);
+
+    if (!isUsernameValid) {
+      // Username contains invalid characters, display an error message or take appropriate action
+      showMessage({
+        message: "Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir. Türkçe karakter içermemeli",
+        type: "danger",
+      });
+      return;
+    }
+
     if (values.password === values.repassword) {
       
       if (values.password.length >= 6) {
@@ -65,8 +74,8 @@ const SignUp = ({ navigation }) => {
                 isSecure
               />
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.loginButton} onPress={() => handleSubmit(values)}>
-                  <Text style={styles.loginButtonText}>Kayıt Ol</Text>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => handleSubmit(values)}>
+                  <Text style={styles.signUpButtonText}>Kayıt Ol</Text>
                 </TouchableOpacity>
               </View>
             </View>

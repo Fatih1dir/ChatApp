@@ -41,10 +41,10 @@ const LoginPage = ({ navigation }) => {
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={styles.signUpButton}
+                  style={styles.loginButton}
                   onPress={() => handleSubmit(values)}
                 >
-                  <Text style={styles.signUpButtonText}>Giriş Yap</Text>
+                  <Text style={styles.loginButtonText}>Giriş Yap</Text>
                 </TouchableOpacity>
               </View>
             </View>
