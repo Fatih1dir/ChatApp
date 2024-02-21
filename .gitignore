@@ -38,5 +38,3 @@ yarn-error.*
 # Gradle files
 .gradle/
 build/
-firebaseConfig.js
-metro.config.js

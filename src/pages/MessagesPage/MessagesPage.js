@@ -16,9 +16,11 @@ import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
 import ParseContentData from "../../Controllers/ParseContentData";
 import MessageCard from "../../Components/MessageCard/MessageCard";
 import { showMessage } from "react-native-flash-message";
+import { usePushNotifications } from "../../Controllers/usePushNotification";
 
 function MessagesPage({ route }) {
   const participantsNum = route.params.participants.length;
+  const participants = route.params.participants;
   const db = getDatabase();
   const messagesId = route.params.chatId;
   const auth = getAuth(app);
@@ -26,20 +28,32 @@ function MessagesPage({ route }) {
   const [messages, setMessages] = React.useState({});
   const [isAnonymous, setIsAnonymous] = React.useState(false);
 
+  const { expoPushToken, notification,sendNotification } = usePushNotifications();
+
   const onType = (text) => {
     setValue(text);
   };
 
   const handleMessageSend = (messagesId, senderId, content) => {
     setValue("");
-    SendMessage(messagesId, senderId, content, isAnonymous);
+    SendMessage(messagesId, senderId, content, isAnonymous,participants);
   };
 
   const getMessages = () => {
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
+  
     onValue(ref(db, `Chats/${messagesId}/messages`), (messageSnapshot) => {
       if (messageSnapshot.exists()) {
         const messageData = messageSnapshot.val();
-        const parsedChat = ParseContentData(messageData, "sendAt", false);
+        
+        // Filter messages sent in the last 24 hours
+        const filteredMessages = Object.values(messageData).filter((message) => {
+          const messageSendAt = new Date(message.sendAt);
+          return messageSendAt > twentyFourHoursAgo;
+        });
+  
+        const parsedChat = ParseContentData(filteredMessages, "sendAt", false);
         setMessages(parsedChat);
       }
     });

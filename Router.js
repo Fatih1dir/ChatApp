@@ -29,6 +29,7 @@ const AuthorizationStack = () => {
           fontWeight: "bold",
         },
         headerTitleAlign: "center",
+        headerLeft: () => <Image style={{ width: 50, height: 50 , tintColor: "#FFFFFF"}} source={require("./assets/icon.png")}></Image>,
       }}
     >
       <Stack.Screen
@@ -72,6 +73,7 @@ const UserStack = () => {
               </TouchableOpacity>
             </View>
           ),
+          headerLeft: () => <Image style={{ width: 50, height: 50 , tintColor: "#FFFFFF"}} source={require("./assets/icon.png")}></Image>,
         })}
       />
       <Stack.Screen
@@ -132,6 +134,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
+          
           headerStyle: {
             backgroundColor: "#610C9F",
           },

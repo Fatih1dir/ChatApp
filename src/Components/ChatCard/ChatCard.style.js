@@ -43,6 +43,7 @@ export default styles = StyleSheet.create({
   updatedAt: {
     fontSize: 14,
     color: "#777",
+    marginTop:-20,
   },
   lastMessage: {
     fontSize: 16,

@@ -1,7 +1,14 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from "react-native";
 import styles from "../ChatCard/ChatCard.style";
-import { formatDistance, parseISO } from "date-fns";
+import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import tr from "date-fns/locale/tr";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -13,19 +20,33 @@ function ChatCard({
   chatImage,
   onPress,
 }) {
+  const [formattedDate, setFormattedDate] = React.useState("");
   const [maxLength, setMaxLength] = React.useState(40);
-  const formattedDate = formatDistance(parseISO(updatedAt), new Date(), {
-    addSuffix: true,
-    locale: tr,
-  });
 
   // Function to truncate the message to a specified length
   const truncateMessage = (message, maxLength) => {
     const truncatedMessage = message.substring(0, maxLength - 3);
-    return truncatedMessage.length < message.length ? truncatedMessage + "..." : truncatedMessage;
+    return truncatedMessage.length < message.length
+      ? truncatedMessage + "..."
+      : truncatedMessage;
+  };
+
+  const dateFormat = (dateToFormat) => {
+    const date = parseISO(dateToFormat);
+
+    if (isToday(date)) {
+      return format(date, "HH:mm", { locale: tr });
+    } else if (isYesterday(date)) {
+      return "Dün";
+    } else {
+      return format(date, "MM/dd/yyyy", { locale: tr });
+    }
   };
 
   React.useEffect(() => {
+    setFormattedDate(
+      dateFormat(updatedAt)
+    );
     if (lastMessage.message) {
       const screenWidth = Dimensions.get("window").width;
 
@@ -33,7 +54,10 @@ function ChatCard({
       let newMaxLength = 30;
 
       // You can adjust the logic based on your layout requirements
-      if ((lastMessage.message.length + lastMessage.senderUsername.length) > 20 && screenWidth > 0) {
+      if (
+        lastMessage.message.length + lastMessage.senderUsername.length > 20 &&
+        screenWidth > 0
+      ) {
         // Adjust the formula based on your specific requirements
         newMaxLength = Math.floor((screenWidth / 10) * 4);
         setMaxLength(newMaxLength);
@@ -61,20 +85,20 @@ function ChatCard({
         </View>
         <Text style={styles.updatedAt}>{formattedDate}</Text>
       </View>
-      {lastMessage.message ? <View style={styles.lastMessageContainer}>
-        {lastMessage.isAnonymous ? (
-          <Text style={styles.username}>Anonim:</Text>
-        ) : (
-          <Text style={styles.username}>{lastMessage.senderUsername}:</Text>
-        )}
-        <Text style={styles.lastMessage}>
-          {truncateMessage(lastMessage.message, 30)}
-        </Text>
-      </View> : ( 
-        <Text style={{}}>
-      </Text>
+      {lastMessage.message ? (
+        <View style={styles.lastMessageContainer}>
+          {lastMessage.isAnonymous ? (
+            <Text style={styles.username}>Anonim:</Text>
+          ) : (
+            <Text style={styles.username}>{lastMessage.senderUsername}:</Text>
+          )}
+          <Text style={styles.lastMessage}>
+            {truncateMessage(lastMessage.message, 30)}
+          </Text>
+        </View>
+      ) : (
+        <Text style={{}}></Text>
       )}
-      
     </TouchableOpacity>
   );
 }

@@ -1,4 +1,6 @@
 import { getDatabase, ref, push, set, get } from "firebase/database";
+import React from "react";
+
 
 async function getUsername(senderId) {
   const db = getDatabase();
@@ -63,6 +65,7 @@ function createChat(senderId, chatName, participants,chatImage) {
         updatedAt: getDate()
         // Add any other chat metadata
       };
+      setChat(chatData)
       set(ref(db, `Chats/${newChatKey}`), chatData);
     } else {
       console.log("Sender's username not found.");
@@ -71,6 +74,7 @@ function createChat(senderId, chatName, participants,chatImage) {
   // Add chatId to the receivers' chatIds
   participants.forEach((receiverUsername) => {
     getUserId(receiverUsername.username).then((receiverUserid) => {
+      //console.log(receiverUserid);
       if (receiverUserid) {
         set(ref(db, `users/${receiverUserid}/chatIds/${newChatKey}/updateDate`), updateDate);
       } else {

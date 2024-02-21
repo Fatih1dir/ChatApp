@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React from "react";
 import { Text, View, SafeAreaView, FlatList } from "react-native";
 import styles from "./HomePage.style";
 import { app } from "../../../firebaseConfig";
@@ -11,7 +11,7 @@ import ChatCard from "../../Components/ChatCard/ChatCard";
 import { FloatingAction } from "react-native-floating-action";
 import Loading from "../../Components/Loading/Loading";
 import ParseContentData from "../../Controllers/ParseContentData";
-import { usePushNotifications } from "../../Controllers/usePushNotification";
+import {sendNotification} from "../../Controllers/usePushNotification";
 
 const auth = getAuth(app);
 
@@ -19,15 +19,10 @@ const HomePage = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false);
   const [chats, setChats] = React.useState([]);
   const chatDataArray = [];
+
   const currentUserId = auth.currentUser.uid;
   const db = getDatabase();
   const userChatIdsRef = ref(db, `users/${currentUserId}/chatIds`);
-
-  const { expoPushToken,sendNotification } = usePushNotifications(); // Ensure expoPushToken is used
-
-  // useEffect(() => {
-  //   console.log(expoPushToken);
-  // }, [expoPushToken]);
 
   const actions = [
     {
@@ -47,7 +42,9 @@ const HomePage = ({ navigation }) => {
   ];
 
   const handlePress = (name) => {
+    // Handle button press based on the name
     if (name === "add_chat") {
+      //handleModalToggle();
       navigation.navigate("CreateChat");
     } else if (name === "add_friend") {
       navigation.navigate("AddFriend");
@@ -58,82 +55,81 @@ const HomePage = ({ navigation }) => {
     navigation.navigate("MessagesPage", pressedChat);
   };
 
-  const getLastMessages = (chatDataArray, chatIds,token) => {
-    if (chatDataArray.length === chatIds.length) {
-      const parsedChatData = ParseContentData(chatDataArray, "updatedAt", true);
+  const handleChatData = (chatId, chatSnapshot) => {
+    if (chatSnapshot.exists()) {
+      const chatData = { chatId, ...chatSnapshot.val() };
+      chatDataArray.push(chatData);
+    }
+  };
 
-      const chatsWithLastMessage = parsedChatData.map((chat) => {
-        let lastMessage;
 
-        if (!chat.messages || chat.messages.length === 0) {
-          lastMessage = "No message yet";
-        } else {
-          lastMessage = ParseContentData(chat.messages, "sendAt", true)[0];
+  const handleUserChatIdsSnapshot = (snapshot) => {
+    if (snapshot.exists()) {
+      const chatIds = Object.keys(snapshot.val());
+      // Clear the array before fetching new data
+      chatDataArray.length = 0;
 
-          // Update the chats updatedAt field
-          update(ref(db, `Chats/${chat.chatId}`), {
-            updatedAt: lastMessage.sendAt,
-          });
+      chatIds.forEach((chatId) => {
+        const chatRef = ref(db, `Chats/${chatId}`);
+        onValue(chatRef, (chatSnapshot) => {
+          handleChatData(chatId, chatSnapshot);
+          // Update the state only once, after processing all chat data
+          if (chatDataArray.length === chatIds.length) {
+            const parsedChatData = ParseContentData(
+              chatDataArray,
+              "updatedAt",
+              true
+            );
 
-          // Check if the last message was sent within the last minute
-          const currentTime = new Date();
-          const lastMessageTime = new Date(lastMessage.sendAt);
+            const chatsWithLastMessage = parsedChatData.map((chat) => {
+              let lastMessage;
 
-          if (currentTime - lastMessageTime <= 30000 && token) {
-            // Send a notification here
-            sendNotification(lastMessage.senderUsername,lastMessage.message);
+              if (!chat.messages || chat.messages.length === 0) {
+                lastMessage = "No message yet";
+              } else {
+                lastMessage = ParseContentData(
+                  chat.messages,
+                  "sendAt",
+                  true
+                )[0];
+                // Update the chats updateAt field
+                update(ref(db, `Chats/${chat.chatId}`), {
+                  updatedAt: lastMessage.sendAt,
+                }).then(() => {
+                  console.log(chats);
+                });
+              }
+              return {
+                ...chat,
+                lastMessage,
+              };
+            });
+
+            setChats(chatsWithLastMessage);
+            setLoading(false);
           }
-        }
-        return {
-          ...chat,
-          lastMessage,
-        };
+        });
       });
-      setChats(chatsWithLastMessage);
+    } else {
+      setChats([]);
       setLoading(false);
     }
   };
 
-  const handleRenderChatCard = (chat) => {
-    return (
-      <ChatCard
-        chatName={chat.name}
-        chatImage={chat.chatImage}
-        participants={chat.participants}
-        updatedAt={chat.updatedAt}
-        lastMessage={chat.lastMessage}
-        onPress={() => handleChatCardPress(chat)}
-      />
-    );
+  const fetchChatData = () => {
+    setLoading(true);
+
+    onValue(userChatIdsRef, handleUserChatIdsSnapshot);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    const unsubscribe = onValue(userChatIdsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const chatIds = Object.keys(snapshot.val());
-        const chatDataArray = [];
+  React.useEffect(() => {
+    fetchChatData();
+  }, []);
+  React.useEffect(() => {
+    console.log("yeni mesaj geldi");
+  }, [chats]);
 
-        chatIds.forEach((chatId) => {
-          const chatRef = ref(db, `Chats/${chatId}`);
-          onValue(chatRef, (chatSnapshot) => {
-            const chatData = { chatId, ...chatSnapshot.val() };
-            chatDataArray.push(chatData);
-            getLastMessages(chatDataArray, chatIds,expoPushToken);
-            //console.log(chats);
-          });
-        });
-      } else {
-        setChats([]);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [currentUserId,expoPushToken]);
-
+  // Handle loading state
   if (loading) {
     return <Loading></Loading>;
   }
@@ -144,7 +140,16 @@ const HomePage = ({ navigation }) => {
           data={chats}
           keyExtractor={(item) => item.chatId}
           style={styles.flatListContainer}
-          renderItem={({ item }) => handleRenderChatCard(item)}
+          renderItem={({ item }) => (
+            <ChatCard
+              chatName={item.name}
+              chatImage={item.chatImage}
+              participants={item.participants}
+              updatedAt={item.updatedAt}
+              lastMessage={item.lastMessage}
+              onPress={() => handleChatCardPress(item)}
+            />
+          )}
         />
       ) : (
         <>
