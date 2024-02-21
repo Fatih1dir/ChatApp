@@ -16,6 +16,7 @@ Chat App is a free messaging app inspired by messaging & social media apps. The 
   - **Authentication** - Allows an app to securely save user data in the cloud.
   - **Cloud Storage** - Store and serve user-generated content.
   - **Realtime Database** - Store the user and chat informations.
+  - **Cloud Messaging** - Allows the app to send notificiations.
 
 
 ## Features
@@ -23,12 +24,14 @@ Chat App is a free messaging app inspired by messaging & social media apps. The 
   - Authentication (Email)
   - Storage
   - Realtime DB
+  - Cloud Messaging
 - Create user profile (Username).
 - Search users by Username
 - Add friend
 - Send text.
 - Create chat rooms or text someone in your friends list.
 - Send anonymous message if you are in a chat room.
+- Receive notification when a message comes.
 
 ## Contribute
 If you would like to contribute with a new feature or submit a bugfix, fork this repo and send a pull request.
