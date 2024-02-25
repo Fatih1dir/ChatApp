@@ -31,6 +31,8 @@ export default styles = StyleSheet.create({
     marginRight: 10,
   },
   blankProfileCircle: {
-    
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   }
   });

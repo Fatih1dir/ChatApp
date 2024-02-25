@@ -1,7 +1,30 @@
 import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
-    fontSize:12
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  leftContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    marginRight: -23,
+  },
+  chatBubbleContainer: {
+    flex: 4,
+  },
+  rightContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    marginLeft: -23,
+  },
+  userImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 30,
+    marginRight: 5,
+    marginTop: 75,
+    borderWidth: 1,
+    borderColor: "grey",
   },
   ImageContainer: {
   },
@@ -12,7 +35,6 @@ export default StyleSheet.create({
   user: {
     color: "black",
     padding: 5,
-    fontStyle:'italic'
   },
   date: {
     color: "white",
@@ -48,9 +70,7 @@ export default StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 1,
     borderColor: "grey",
-    marginRight: 10,
+    marginRight: 5,
+    marginTop: 75,
   },
-  bubble:{
-    
-  }
 });

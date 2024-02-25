@@ -1,12 +1,9 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Text, View, SafeAreaView, FlatList } from "react-native";
 import styles from "./HomePage.style";
 import { app } from "../../../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, get, onValue, update } from "firebase/database";
-import Button from "../../Components/Button/Button";
-import CreateChatModal from "../../Components/Modal/CreateChatModal/CreateChatModal";
-import { createChat } from "../../Controllers/CreateChatController";
 import ChatCard from "../../Components/ChatCard/ChatCard";
 import { FloatingAction } from "react-native-floating-action";
 import Loading from "../../Components/Loading/Loading";
@@ -23,11 +20,7 @@ const HomePage = ({ navigation }) => {
   const db = getDatabase();
   const userChatIdsRef = ref(db, `users/${currentUserId}/chatIds`);
 
-  const { expoPushToken,sendNotification } = usePushNotifications(); // Ensure expoPushToken is used
-
-  // useEffect(() => {
-  //   console.log(expoPushToken);
-  // }, [expoPushToken]);
+  const { expoPushToken, sendNotification } = usePushNotifications(); // Ensure expoPushToken is used
 
   const actions = [
     {
@@ -58,14 +51,33 @@ const HomePage = ({ navigation }) => {
     navigation.navigate("MessagesPage", pressedChat);
   };
 
-  const getLastMessages = (chatDataArray, chatIds,token) => {
+  const handleLongPressChatCard = (pressedChat) => {
+    console.log(pressedChat.chatId, pressedChat.participants);
+  };
+
+  const getLastMessages = (chatDataArray, chatIds, token) => {
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1);
     if (chatDataArray.length === chatIds.length) {
       const parsedChatData = ParseContentData(chatDataArray, "updatedAt", true);
 
       const chatsWithLastMessage = parsedChatData.map((chat) => {
         let lastMessage;
 
+        const filteredMessages = Object.values(chat.messages || {}).filter(
+          (message) => {
+            const messageSendAt = new Date(message.sendAt);
+            const currentTime = new Date();
+
+            // Check if the message was sent within the last 24 hours
+            return currentTime - messageSendAt <= 24 * 60 * 60 * 1000;
+          }
+        );
+
         if (!chat.messages || chat.messages.length === 0) {
+          lastMessage = "No message yet";
+        }
+        else if(filteredMessages.length == 0){
           lastMessage = "No message yet";
         } else {
           lastMessage = ParseContentData(chat.messages, "sendAt", true)[0];
@@ -79,9 +91,13 @@ const HomePage = ({ navigation }) => {
           const currentTime = new Date();
           const lastMessageTime = new Date(lastMessage.sendAt);
 
-          if (currentTime - lastMessageTime <= 30000 && token) {
+          if (
+            lastMessage.senderId != auth.currentUser.uid &&
+            currentTime - lastMessageTime <= 30000 &&
+            token
+          ) {
             // Send a notification here
-            sendNotification(lastMessage.senderUsername,lastMessage.message);
+            sendNotification(lastMessage.senderUsername, lastMessage.message);
           }
         }
         return {
@@ -100,7 +116,11 @@ const HomePage = ({ navigation }) => {
         chatName={chat.name}
         chatImage={chat.chatImage}
         participants={chat.participants}
-        updatedAt={chat.updatedAt}
+        updatedAt={
+          chat.lastMessage
+            ? chat.lastMessage.sendAt || chat.updatedAt
+            : chat.updatedAt
+        }
         lastMessage={chat.lastMessage}
         onPress={() => handleChatCardPress(chat)}
       />
@@ -119,7 +139,7 @@ const HomePage = ({ navigation }) => {
           onValue(chatRef, (chatSnapshot) => {
             const chatData = { chatId, ...chatSnapshot.val() };
             chatDataArray.push(chatData);
-            getLastMessages(chatDataArray, chatIds,expoPushToken);
+            getLastMessages(chatDataArray, chatIds, expoPushToken);
             //console.log(chats);
           });
         });
@@ -132,7 +152,7 @@ const HomePage = ({ navigation }) => {
     return () => {
       unsubscribe();
     };
-  }, [currentUserId,expoPushToken]);
+  }, [currentUserId, expoPushToken]);
 
   if (loading) {
     return <Loading></Loading>;

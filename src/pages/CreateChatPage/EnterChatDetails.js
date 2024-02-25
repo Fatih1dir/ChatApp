@@ -68,14 +68,12 @@ const EnterChatDetails = ({ route, navigation }) => {
 
     // Get the download URL of the uploaded image
       const downloadURL = await getDownloadURL(storageReference);
-      createChat(auth.currentUser.uid,chatName,selectedUsers,downloadURL);
-      
+      await createChat(auth.currentUser.uid,chatName,selectedUsers,downloadURL,navigation);
     }
     else{
-      createChat(auth.currentUser.uid,chatName,selectedUsers,"");
+      await createChat(auth.currentUser.uid,chatName,selectedUsers,"",navigation);
     }
-    navigation.navigate("Home");
-    
+    //navigation.navigate("Home");
   }
 
   return (

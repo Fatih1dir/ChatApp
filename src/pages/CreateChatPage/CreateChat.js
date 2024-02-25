@@ -26,24 +26,46 @@ const CreateChat = ({ navigation }) => {
   };
 
   const fetchData = async () => {
-    try {
-      const friendsRef = ref(
-        getDatabase(app),
-        `users/${auth.currentUser.uid}/friends`
-      );
-      const friendsSnapshot = await get(friendsRef);
+  try {
+    const friendsRef = ref(
+      getDatabase(app),
+      `users/${auth.currentUser.uid}/friends`
+    );
+    const friendsSnapshot = await get(friendsRef);
 
-      if (friendsSnapshot.exists()) {
-        const friendsData = friendsSnapshot.val();
-        const friendsArray = Object.values(friendsData);
-        setFriends(friendsArray);
-      } else {
-        setFriends([]);
-      }
-    } catch (error) {
-      console.error("Error fetching friends:", error);
+    if (friendsSnapshot.exists()) {
+      const friendsData = friendsSnapshot.val();
+      const userIds = Object.keys(friendsData);
+
+      // Fetch users from the database using the retrieved user IDs
+      const usersPromises = userIds.map(async (userId) => {
+        const userRef = ref(getDatabase(app), `users/${userId}`);
+        const userSnapshot = await get(userRef);
+
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.val();
+          return { ...userData, userId }; // Include userId in user object
+        } else {
+          console.log(`User with ID ${userId} not found`);
+          return null;
+        }
+      });
+
+      // Resolve all promises to get the array of users
+      const usersArray = await Promise.all(usersPromises);
+
+      // Filter out null values (users not found)
+      const validUsers = usersArray.filter((user) => user !== null);
+
+      setFriends(validUsers);
+    } else {
+      setFriends([]);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching friends:", error);
+  }
+};
+
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -93,7 +115,7 @@ const CreateChat = ({ navigation }) => {
       )}
       <FlatList
         data={friends}
-        keyExtractor={(item) => item.userid}
+        keyExtractor={(item) => item.userId}
         renderItem={({ item }) => renderUsers(item)}
       />
       {selectedUsers.length > 0 && (

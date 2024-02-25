@@ -74,7 +74,7 @@ const AddFriend = () => {
   const handleAddFriend = async (friendUserId) => {
     try {
       // Update the current user's data with the friend's userid
-      await set(ref(db,`users/${auth.currentUser.uid}/friends/${friendUserId.userid}`), friendUserId);
+      await set(ref(db,`users/${auth.currentUser.uid}/friends/${friendUserId.userid}`), friendUserId.userid);
 
       // Handle success (you can show a success message or navigate to a different screen)
       showMessage({

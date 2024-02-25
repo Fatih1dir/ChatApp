@@ -16,19 +16,16 @@ import { getDatabase, ref, push, set, get, onValue } from "firebase/database";
 import ParseContentData from "../../Controllers/ParseContentData";
 import MessageCard from "../../Components/MessageCard/MessageCard";
 import { showMessage } from "react-native-flash-message";
-import { usePushNotifications } from "../../Controllers/usePushNotification";
 
 function MessagesPage({ route }) {
-  const participantsNum = route.params.participants.length;
   const participants = route.params.participants;
-  const db = getDatabase();
+  const participantsNum = Object.keys(participants).length;
   const messagesId = route.params.chatId;
+  const db = getDatabase();
   const auth = getAuth(app);
   const [value, setValue] = React.useState("");
   const [messages, setMessages] = React.useState({});
   const [isAnonymous, setIsAnonymous] = React.useState(false);
-
-  const { expoPushToken, notification,sendNotification } = usePushNotifications();
 
   const onType = (text) => {
     setValue(text);

@@ -69,7 +69,7 @@ const UserStack = () => {
             <View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 {/* <Text style={{ color: "#3C3C3B" }}>Profil</Text> */}
-                <Icon name="account-cowboy-hat"  size={30} color="#FFFFFF" />
+                <Icon name="account"  size={35} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           ),
@@ -84,7 +84,14 @@ const UserStack = () => {
       <Stack.Screen
         name="MessagesPage"
         component={MessagesPage}
-        options={({ route }) => ({ title: route.params.name })}
+        options={({ route, navigation }) => ({
+          title: route.params.name,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <Icon name="arrow-left" size={25} color="white" />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen
         name="AddFriend"

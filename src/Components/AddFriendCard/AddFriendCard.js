@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const AddFriendCard = ({ user, onAddFriend, friends }) => {
   const [attributes, setAttributes] = React.useState([]);
   const [isFriendAdded, setFriendAdded] = React.useState(false);
+  console.log(friends);
   const fetchUserData = async () => {
     try {
       const data = await getUserAttributesbyId(user.userid);
@@ -24,6 +25,15 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
   };
   React.useEffect(() => {
     fetchUserData();
+
+    const friendUsernames = friends.map((friend) => friend.username);
+
+    if (friendUsernames.includes(user.username)) {
+      setFriendAdded(true);
+    } else {
+      onAddFriend(user);
+      setFriendAdded(true);
+    }
   }, []);
 
   const handleAddFriend = () => {
@@ -38,7 +48,7 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
         ) : (
           <Icon
             style={styles.blankProfileCircle}
-            size={40}
+            size={50}
             name="account"
             color="#1ac0c6"
           ></Icon>
@@ -47,7 +57,7 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
         <Text style={styles.username}>{user.username}</Text>
       </View>
       <View style={styles.buttonContainer}>
-      {isFriendAdded || friends.includes(user.username) ? (
+        {isFriendAdded || friends.includes(user.username) ? (
           <TouchableOpacity
             style={[styles.addButton, { backgroundColor: "#1ac0c6" }]}
             disabled={true} // Disable the button after friend is added
@@ -55,10 +65,7 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
             <Text>Arkadaş</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddFriend}
-          >
+          <TouchableOpacity style={styles.addButton} onPress={handleAddFriend}>
             <Text>Arkadaş Ekle</Text>
           </TouchableOpacity>
         )}

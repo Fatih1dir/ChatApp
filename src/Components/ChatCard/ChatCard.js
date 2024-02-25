@@ -25,11 +25,17 @@ function ChatCard({
 
   // Function to truncate the message to a specified length
   const truncateMessage = (message, maxLength) => {
+    if (!message) {
+      return ""; // Handle the case where message is undefined or null
+    }
+
     const truncatedMessage = message.substring(0, maxLength - 3);
     return truncatedMessage.length < message.length
       ? truncatedMessage + "..."
       : truncatedMessage;
   };
+
+
 
   const dateFormat = (dateToFormat) => {
     const date = parseISO(dateToFormat);
@@ -43,30 +49,31 @@ function ChatCard({
     }
   };
 
-  React.useEffect(() => {
-    setFormattedDate(
-      dateFormat(updatedAt)
-    );
-    if (lastMessage.message) {
-      const screenWidth = Dimensions.get("window").width;
+  const handleOnLongPress=()=>{
+    
+  }
 
-      // Set a default value for the maximum length
+  React.useEffect(() => {
+    setFormattedDate(dateFormat(updatedAt));
+
+    // Check if lastMessage is defined before accessing its properties
+    if (lastMessage && lastMessage.message) {
+      const screenWidth = Dimensions.get("window").width;
       let newMaxLength = 30;
 
-      // You can adjust the logic based on your layout requirements
       if (
         lastMessage.message.length + lastMessage.senderUsername.length > 20 &&
         screenWidth > 0
       ) {
-        // Adjust the formula based on your specific requirements
         newMaxLength = Math.floor((screenWidth / 10) * 4);
         setMaxLength(newMaxLength);
       }
     }
-  }, [lastMessage.message]);
+  }, [lastMessage, updatedAt]);
+
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <TouchableOpacity style={styles.card} onPress={onPress} onLongPress={()=>handleOnLongPress()}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           {chatImage ? (
@@ -96,9 +103,9 @@ function ChatCard({
             {truncateMessage(lastMessage.message, 30)}
           </Text>
         </View>
-      ) : (
-        <Text style={{}}></Text>
-      )}
+      ) : lastMessage=="No message yet" ? (
+        <Text style={{flex:1,alignSelf:"center",color:"#3C3C3B"}}>Henüz mesajınız yok.Bir mesaj gönderin.</Text>
+      ): null}
     </TouchableOpacity>
   );
 }
