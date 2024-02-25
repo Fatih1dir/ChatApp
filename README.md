@@ -25,6 +25,8 @@ Chat App is a free messaging app inspired by messaging & social media apps. The 
   - Storage
   - Realtime DB
   - Cloud Messaging
+- **Expo:**
+  - Expo-Notifications to send notification to user.
 - Create user profile (Username).
 - Search users by Username
 - Add friend
