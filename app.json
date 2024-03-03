@@ -4,12 +4,12 @@
     "slug": "BGS_ChatApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ic_launcher.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash2.png",
+      "resizeMode": "cover"
+      
     },
     "plugins": [
       [
@@ -17,7 +17,16 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/favicon.png",
+          "color": "#ffffff",
+          "backgroundColor": "#ffffff"
+        }
       ]
+        
     ],
     "assetBundlePatterns": [
       "**/*"
@@ -26,14 +35,24 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+      "splash":{
+        "image": "./assets/splash2.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+      },
+      "icon":"./assets/ic_launcher.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ic_launcher.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO","com.google.c2dm.permission.RECEIVE"
       ],
+      
       "package": "com.fatih1dir.BGChatApp"
+      
     },
     "web": {
       "favicon": "./assets/favicon.png"

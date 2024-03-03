@@ -6,7 +6,7 @@ import { SignUp } from "./src/pages/SignUpPage/SignUp";
 import { LoginPage } from "./src/pages/LoginPage/LoginPage";
 import { ProfilePage } from "./src/pages/ProfilePage/ProfilePage";
 import MessagesPage from "./src/pages/MessagesPage/MessagesPage";
-import React, { useEffect, useState } from "react";
+import React, { useCallback,useEffect, useState } from "react";
 import FlashMessage from "react-native-flash-message";
 import { useAuthentication } from "./src/Controllers/UserAuthController";
 import Loading from "./src/Components/Loading/Loading";
@@ -15,7 +15,10 @@ import CreateChat from "./src/pages/CreateChatPage/CreateChat";
 import EnterChatDetails from "./src/pages/CreateChatPage/EnterChatDetails";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
+import * as SplashScreen from 'expo-splash-screen';
 const Stack = createNativeStackNavigator();
+SplashScreen.preventAutoHideAsync();
+
 
 const AuthorizationStack = () => {
   return (
@@ -29,7 +32,7 @@ const AuthorizationStack = () => {
           fontWeight: "bold",
         },
         headerTitleAlign: "center",
-        headerLeft: () => <Image style={{ width: 50, height: 50 , tintColor: "#FFFFFF"}} source={require("./assets/icon.png")}></Image>,
+        headerLeft: () => <Image style={{ width: 50, height: 50 , tintColor: "#FFFFFF"}} source={require("./assets/chat.png")}></Image>,
       }}
     >
       <Stack.Screen
@@ -114,42 +117,48 @@ const UserStack = () => {
 
 export default function App() {
   const { user, loading } = useAuthentication();
-
-  if (loading) {
-    return (
-      <Loading></Loading>
-    );
-  }
-
-  // if(loading)
-  //   return <Loading/>
-  // const [userSession, setUserSession] = useState(null); // Initialize as null
+  const [appIsReady, setAppIsReady] = useState(false);
 
   // useEffect(() => {
-  //   const auth = getAuth(app); // Get the authentication instance
+  //   async function prepare() {
+  //     try {
+  //       // Pre-load fonts, make any API calls you need to do here
+  //       await Font.loadAsync(Entypo.font);
+  //     } catch (e) {
+  //       console.warn(e);
+  //     } finally {
+  //       // Tell the application to render
+  //       setAppIsReady(true);
+  //     }
+  //   }
 
-  //   // Use onAuthStateChanged to listen for authentication state changes
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     setUserSession(user); // Set user session state
-  //   });
-
-  //   // Clean up the listener when the component unmounts
-  //   return () => unsubscribe();
+  //   prepare();
   // }, []);
 
+  // const onLayoutRootView = async () => {
+  //   if (appIsReady) {
+  //     console.log("App is ready");
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={async()=> await SplashScreen.hideAsync()}>
       <Stack.Navigator
         screenOptions={{
-          
           headerStyle: {
-            backgroundColor: "#610C9F",
+            backgroundColor: "#82368C",
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
             fontWeight: "bold",
           },
           headerTitleAlign: "center",
+          statusBarColor: "#82368C",
         }}
       >
         {user ? (
@@ -170,6 +179,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

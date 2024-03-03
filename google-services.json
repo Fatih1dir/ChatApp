@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "395506285582",
+    "firebase_url": "https://reactnativeprojects-e993c-default-rtdb.firebaseio.com",
+    "project_id": "reactnativeprojects-e993c",
+    "storage_bucket": "reactnativeprojects-e993c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395506285582:android:104ca1ea57aa919669105f",
+        "android_client_info": {
+          "package_name": "com.fatih1dir.BGChatApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395506285582-0e8tbga2ltrihtma16123r2kfjcp3vcl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp7j1-GLf7Mfyr7mX82oQgWiSxE938JuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395506285582-0e8tbga2ltrihtma16123r2kfjcp3vcl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

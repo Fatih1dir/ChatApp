@@ -11,7 +11,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 const AddFriendCard = ({ user, onAddFriend, friends }) => {
   const [attributes, setAttributes] = React.useState([]);
   const [isFriendAdded, setFriendAdded] = React.useState(false);
-  console.log(friends);
   const fetchUserData = async () => {
     try {
       const data = await getUserAttributesbyId(user.userid);
@@ -24,17 +23,17 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
     }
   };
   React.useEffect(() => {
-    fetchUserData();
-
     const friendUsernames = friends.map((friend) => friend.username);
 
-    if (friendUsernames.includes(user.username)) {
+    // Check if the friend is already added before fetching user data
+    if (friendUsernames.includes(user.username) && !isFriendAdded) {
       setFriendAdded(true);
     } else {
-      onAddFriend(user);
-      setFriendAdded(true);
+      // Fetch user data and then check if the friend is added
+      fetchUserData();
     }
-  }, []);
+  }, [friends, isFriendAdded]);
+  
 
   const handleAddFriend = () => {
     onAddFriend(user);
@@ -65,7 +64,7 @@ const AddFriendCard = ({ user, onAddFriend, friends }) => {
             <Text>Arkadaş</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.addButton} onPress={handleAddFriend}>
+          <TouchableOpacity style={styles.addButton} onPress={()=>handleAddFriend()}>
             <Text>Arkadaş Ekle</Text>
           </TouchableOpacity>
         )}

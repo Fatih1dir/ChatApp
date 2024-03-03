@@ -98,6 +98,7 @@ const HomePage = ({ navigation }) => {
           ) {
             // Send a notification here
             sendNotification(lastMessage.senderUsername, lastMessage.message);
+            console.log("Notified");
           }
         }
         return {
@@ -155,7 +156,7 @@ const HomePage = ({ navigation }) => {
   }, [currentUserId, expoPushToken]);
 
   if (loading) {
-    return <Loading></Loading>;
+    return <Loading/>;
   }
   return (
     <View style={styles.container}>
